@@ -50,8 +50,10 @@
               /* Loop through found links and log if link text regex matches file attributes
                E.g. Link to file (PDF, 2MB)
                Regex101: https://regex101.com/r/158qiE/1/
+
+               Exclude KTPs which appears as a link on every page.
               */
-              if (ln[0].match(/.+\([a-zA-Z]{3,},?(\s[0-9]{1,}\s?(K|M)B)?\)/g)) {
+              if (ln[0].match(/.+\([a-zA-Z]{3,},?(\s[0-9]{1,}\s?(K|M)B)?\)/g) && !ln[0].match(/Knowledge Transfer Partnerships \(KTPs\)/g)) {
                 let arrOut = [timeStamp, arrPages[elem], ln[0].trim(), ln[1]]
                 let strOut = arrOut.join('","')
                 console.log(`"${strOut}"`)
