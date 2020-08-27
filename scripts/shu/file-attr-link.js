@@ -15,7 +15,7 @@
   console.log('Scraping ' + arrPages.length + ' pages for titles, in batches of ' + parallel)
 
   console.log(' This will result in ' + parallelBatches + ' batches.')
-  console.log('"timestamp","batch","index","URL","Title","Error"')
+  console.log('"timestamp","URL","linkText","linkTarget","Error"')
 
   // Split up the Array of arrPages
   let k = 0
@@ -48,15 +48,15 @@
             const lnx = await page.$$eval('a', as => as.map(a => [a.innerText, a.href]));
             for (ln of lnx) {
               if (ln[0].match(/.+\([a-zA-Z]{3,},?(\s[0-9]{1,}\s?(K|M)B)?\)/g)) {
-                let arrOut = [timeStamp, k, arrPages[elem], ln[0].trim(), ln[1]]
+                let arrOut = [timeStamp, arrPages[elem], ln[0].trim(), ln[1]]
                 let strOut = arrOut.join('","')
-                console.log(`"${strOut}"\n`)
+                console.log(`"${strOut}"`)
               } 
             }
           } catch (err) {
             // Report failing element and standard error response
             let timeStamp = new Date(Date.now()).toUTCString();
-            console.log(`"${timeStamp}","${k}","${j}","${arrPages[elem]}","","${err}"`)
+            console.log(`"${timeStamp}","${arrPages[elem]}","","${err}"`)
           }
         }))
       }
