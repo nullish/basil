@@ -1,0 +1,27 @@
+{
+  "name": "nulleteer",
+  "version": "1.0.0",
+  "description": "Bespoke Puppeteer webscraper instance",
+  "main": "index.js",
+  "dependencies": {
+    "puppeteer": "^5.2.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nullish/nulleteer.git"
+  },
+  "keywords": [
+    "puppeteer",
+    "web-scrape"
+  ],
+  "author": "Nullish",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nullish/nulleteer/issues"
+  },
+  "homepage": "https://github.com/nullish/nulleteer#readme"
+}
