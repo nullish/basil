@@ -7,7 +7,7 @@
  const puppeteer = require('puppeteer')
  const parallel = 8;
 
- const arrPages = require("./input/all-shu.json")
+ const arrPages = require("../../input/all-shu.json")
 
   const pageScrape = async (arrPages, parallel) => {
     const parallelBatches = Math.ceil(arrPages.length / parallel)
@@ -43,15 +43,10 @@
             // Element to wait for to confirm page load
             await page.waitForXPath("//title");
             // Get element to search for and report about
-            let elHandle = await page.$x("//a[contains(@class,'ytp-title-link')]");
             let timeStamp = new Date(Date.now()).toUTCString();
             // Get attribute value to report
-            if (elHandle.length > 0) {
-              let txtOut = await page.evaluate(el => el.innerText, elHandle[0]);
-              console.log(`"${timeStamp}","${k}","${j}","${arrPages[elem]}","${txtOut}",""`)
-            } else {
-              console.log(`"${timeStamp}","${k}","${j}","${arrPages[elem]}","","ELEMENT NOT FOUND"`)
-            }
+            const hrefs = await page.$$eval('a', as => as.map(a => a.href));
+            console.log(hrefs)
           } catch (err) {
             // Report failing element and standard error response
             let timeStamp = new Date(Date.now()).toUTCString();
