@@ -7,6 +7,7 @@
  const puppeteer = require('puppeteer')
  const parallel = 8;
 
+// Input array of URLs
  const arrPages = require("../../input/all-shu.json")
 
  const pageScrape = async (arrPages, parallel) => {
@@ -42,11 +43,14 @@
             await page.goto(arrPages[elem])
             // Element to wait for to confirm page load
             await page.waitForXPath("//title");
-            // Get element to search for and report about
             let timeStamp = new Date(Date.now()).toUTCString();
-            // Get attribute value to report
+            // Evaluate page to get all elements matching CSS selector
             const lnx = await page.$$eval('a', as => as.map(a => [a.innerText, a.href]));
             for (ln of lnx) {
+              /* Loop through found links and log if link text regex matches file attributes
+               E.g. Link to file (PDF, 2MB)
+               Regex101: https://regex101.com/r/158qiE/1/
+              */
               if (ln[0].match(/.+\([a-zA-Z]{3,},?(\s[0-9]{1,}\s?(K|M)B)?\)/g)) {
                 let arrOut = [timeStamp, arrPages[elem], ln[0].trim(), ln[1]]
                 let strOut = arrOut.join('","')
