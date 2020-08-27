@@ -9,13 +9,13 @@
 
  const arrPages = require("../../input/all-shu.json")
 
-  const pageScrape = async (arrPages, parallel) => {
-    const parallelBatches = Math.ceil(arrPages.length / parallel)
+ const pageScrape = async (arrPages, parallel) => {
+  const parallelBatches = Math.ceil(arrPages.length / parallel)
 
-    console.log('Scraping ' + arrPages.length + ' pages for titles, in batches of ' + parallel)
+  console.log('Scraping ' + arrPages.length + ' pages for titles, in batches of ' + parallel)
 
-    console.log(' This will result in ' + parallelBatches + ' batches.')
-    console.log('"timestamp","batch","index","URL","Title","Error"')
+  console.log(' This will result in ' + parallelBatches + ' batches.')
+  console.log('"timestamp","batch","index","URL","Title","Error"')
 
   // Split up the Array of arrPages
   let k = 0
@@ -45,8 +45,14 @@
             // Get element to search for and report about
             let timeStamp = new Date(Date.now()).toUTCString();
             // Get attribute value to report
-            const hrefs = await page.$$eval('a', as => as.map(a => a.href));
-            console.log(hrefs)
+            const lnx = await page.$$eval('a', as => as.map(a => [a.innerText, a.href]));
+            for (ln of lnx) {
+              if (ln[0].match(/.+\([a-zA-Z]{3,},?(\s[0-9]{1,}\s?(K|M)B)?\)/g)) {
+                let arrOut = [timeStamp, k, arrPages[elem], ln[0].trim(), ln[1]]
+                let strOut = arrOut.join('","')
+                console.log(`"${strOut}"\n`)
+              } 
+            }
           } catch (err) {
             // Report failing element and standard error response
             let timeStamp = new Date(Date.now()).toUTCString();
