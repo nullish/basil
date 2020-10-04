@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nullish/nulleteer.git"
+    "url": "git+https://github.com/nullish/basil.git"
   },
   "keywords": [
     "puppeteer",
@@ -21,7 +21,7 @@
   "author": "Nullish",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/nullish/nulleteer/issues"
+    "url": "https://github.com/nullish/basil/issues"
   },
-  "homepage": "https://github.com/nullish/nulleteer#readme"
+  "homepage": "https://github.com/nullish/basil#readme"
 }
