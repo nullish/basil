@@ -13,7 +13,7 @@
  const pageScrape = async (arrPages, parallel) => {
   const parallelBatches = Math.ceil(arrPages.length / parallel)
 
-  console.log('Scraping ' + arrPages.length + ' pages for titles, in batches of ' + parallel)
+  console.log('Scraping ' + arrPages.length + ' pages, in batches of ' + parallel)
 
   console.log(' This will result in ' + parallelBatches + ' batches.')
   console.log('"timestamp","URL","linkText","linkTarget","Error"')
