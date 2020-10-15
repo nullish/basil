@@ -51,7 +51,7 @@
                Regex101: 
 
               */
-              if (ln[1].match(/https:\/\/www\.shu\.ac\.uk\/courses.*?yearOfEntry=2019.*/g) ) {
+              if (ln[1].match(/https:\/\/www\.shu\.ac\.uk\/courses.*?2019.*/g) ) {
                 let arrOut = [timeStamp, arrPages[elem], ln[0].trim(), ln[1]]
                 let strOut = arrOut.join('","')
                 console.log(`"${strOut}"`)
