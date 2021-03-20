@@ -8,9 +8,9 @@
  const parallel = 8;
 
 // Input array of URLs
- const arrPages = require("../../input/p300.json")
+const arrPages = require("../../input/p300.json")
 
- const pageScrape = async (arrPages, parallel) => {
+const pageScrape = async (arrPages, parallel) => {
   const parallelBatches = Math.ceil(arrPages.length / parallel)
 
   console.log('Scraping ' + arrPages.length + ' pages, in batches of ' + parallel)
@@ -47,13 +47,9 @@
             // Element to wait for to confirm page load
             await page.waitForXPath("//title");
             let timeStamp = new Date(Date.now()).toUTCString();
-            // Evaluate page to get all elements matching CSS selector
-            const lnx = await page.$$eval('a', as => as.map(a => [a.innerText, a.href]));
-            for (ln of lnx) {
-                let arrOut = [timeStamp, arrPages[elem], resUrl, stCode, stText]
-                let strOut = arrOut.join('","')
-                console.log(`"${strOut}"`)
-            }
+            let arrOut = [timeStamp, arrPages[elem], resUrl, stCode, stText]
+            let strOut = arrOut.join('","')
+            console.log(`"${strOut}"`)
           } catch (err) {
             // Report failing element and standard error response
             let timeStamp = new Date(Date.now()).toUTCString();
