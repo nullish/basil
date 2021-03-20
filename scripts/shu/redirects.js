@@ -8,7 +8,7 @@
  const parallel = 8;
 
 // Input array of URLs
-const arrPages = require("../../input/p300.json")
+const arrPages = require("../../input/redirects-test.json")
 
 const pageScrape = async (arrPages, parallel) => {
   const parallelBatches = Math.ceil(arrPages.length / parallel)
@@ -16,7 +16,7 @@ const pageScrape = async (arrPages, parallel) => {
   console.log('Scraping ' + arrPages.length + ' pages, in batches of ' + parallel)
 
   console.log(' This will result in ' + parallelBatches + ' batches.')
-  console.log('"timeStamp","RequestURL","ResponseURL","statusCode","statusText","Error"')
+  console.log('"timeStamp","RequestURL","ResponseURL","statusCode","statusText","lastRedirectStatusCode","lastRedirectStatusText","Error"')
 
   // Split up the Array of arrPages
   let k = 0
@@ -44,16 +44,26 @@ const pageScrape = async (arrPages, parallel) => {
             let stCode = res.status();
             let stText = res.statusText();
             let resUrl = res.url();
+
             // Element to wait for to confirm page load
             await page.waitForXPath("//title");
             let timeStamp = new Date(Date.now()).toUTCString();
-            let arrOut = [timeStamp, arrPages[elem], resUrl, stCode, stText]
+            let arrOut;
+            if (res.request().redirectChain().length > 0) {
+              let chain = res.request().redirectChain();
+              let lastRedirect = chain[chain.length - 1];
+              let lastRedirectStatusCode = lastRedirect._response._status;
+              let lastRedirectStatusText = lastRedirect._response._statusText;
+              arrOut = [timeStamp, arrPages[elem], resUrl, stCode, stText, lastRedirectStatusCode, lastRedirectStatusText];
+            } else {
+              arrOut = [timeStamp, arrPages[elem], resUrl, stCode, stText, "", ""];
+            }
             let strOut = arrOut.join('","')
             console.log(`"${strOut}"`)
           } catch (err) {
             // Report failing element and standard error response
             let timeStamp = new Date(Date.now()).toUTCString();
-            console.log(`"${timeStamp}","${arrPages[elem]}","","","","${err}"`)
+            console.log(`"${timeStamp}","${arrPages[elem]}","","","","","","${err}"`)
           }
         }))
       }
