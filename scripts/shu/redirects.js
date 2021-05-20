@@ -8,7 +8,7 @@
  const parallel = 8;
 
 // Input array of URLs
-const arrPages = require("../../input/redirects-test.json")
+const arrPages = require("../../input/images.json")
 
 const pageScrape = async (arrPages, parallel) => {
   const parallelBatches = Math.ceil(arrPages.length / parallel)
