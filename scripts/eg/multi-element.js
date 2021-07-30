@@ -45,8 +45,8 @@
             await page.waitForXPath("//title");
             let timeStamp = new Date(Date.now()).toUTCString();
             // Evaluate page to get all elements matching CSS selector
-            const lnx = await page.$$eval('a', as => as.map(a => a.href));
-            let arrOut = await lnx.map(e => ['time', 'elem', e]);
+            const lnx = await page.$$eval('a', as => as.map(a => [a.innerText, a.href]));
+            let arrOut = await lnx.map(e => [timeStamp, arrPages[elem], e[0].trim(), e[1]]);
             let strOut = arrOut.map(e => ('"' + e.join('","') + '"\n'));
             console.log(...strOut);
           } catch (err) {
