@@ -1,7 +1,7 @@
 /**
- * @name Redirect checker
+ * @name Intranet staff profiles
  *
- * @desc Retruns final destination URL and status code.
+ * @desc Staff member name as it appears in intranet searh results
  */
 
  const puppeteer = require('puppeteer')
@@ -9,7 +9,7 @@
 
 // Input array of URLs
 const arg = process.argv[2]
-const inputPath = arg ? "../../" + arg : "../../input/staff.json"
+const inputPath = arg ? "../../" + arg : "../../input/intranetStaff.json"
 
 const arrPages = require(inputPath);
 
@@ -19,7 +19,7 @@ const pageScrape = async (arrPages, parallel) => {
   console.log('Scraping ' + arrPages.length + ' pages, in batches of ' + parallel)
 
   console.log(' This will result in ' + parallelBatches + ' batches.')
-  console.log('"timeStamp","RequestURL","ResponseURL","statusCode","statusText","lastRedirectStatusCode","lastRedirectStatusText","pageTitle","h1","Error"')
+  console.log('"timeStamp","RequestURL","ResponseURL","statusCode","statusText","lastRedirectStatusCode","lastRedirectStatusText","intranetProfileName","Error"')
 
   // Split up the Array of arrPages
   let k = 0
@@ -50,10 +50,8 @@ const pageScrape = async (arrPages, parallel) => {
 
             // Element to wait for to confirm page load
             await page.waitForXPath("//title");
-            let elTitle = await page.$x("//title");
-            let elHeading = await page.$x("//h1");
-            let pageTitle = await page.evaluate(el => el.innerText, elTitle[0]);
-            let heading = await page.evaluate(el => el.innerText, elHeading[0]);
+            let elName = await page.$x("//a[contains(@class,'_1hSsM4Qc')]/span");
+            let intranetProfileName = await page.evaluate(el => el.innerText, elName[0]);
             let timeStamp = new Date(Date.now()).toUTCString();
             let arrOut;
             if (res.request().redirectChain().length > 0) {
@@ -61,16 +59,16 @@ const pageScrape = async (arrPages, parallel) => {
               let lastRedirect = chain[chain.length - 1];
               let lastRedirectStatusCode = lastRedirect._response._status;
               let lastRedirectStatusText = lastRedirect._response._statusText;
-              arrOut = [timeStamp, arrPages[elem], resUrl, stCode, stText, lastRedirectStatusCode, lastRedirectStatusText, pageTitle, heading];
+              arrOut = [timeStamp, arrPages[elem], resUrl, stCode, stText, lastRedirectStatusCode, lastRedirectStatusText, intranetProfileName];
             } else {
-              arrOut = [timeStamp, arrPages[elem], resUrl, stCode, stText, "", "", pageTitle, heading];
+              arrOut = [timeStamp, arrPages[elem], resUrl, stCode, stText, "", "", intranetProfileName];
             }
             let strOut = arrOut.join('","')
             console.log(`"${strOut}"`)
           } catch (err) {
             // Report failing element and standard error response
             let timeStamp = new Date(Date.now()).toUTCString();
-            console.log(`"${timeStamp}","${arrPages[elem]}","","","","","","","",""${err}"`)
+            console.log(`"${timeStamp}","${arrPages[elem]}","","","","","","","",${err}"`)
           }
         }))
       }
