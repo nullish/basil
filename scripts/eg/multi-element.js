@@ -8,7 +8,7 @@
  const parallel = 8;
 
 // Input array of URLs
- const arrPages = require("../../input/all-shu.json")
+ const arrPages = require("../../input/test-multi.json")
 
  const pageScrape = async (arrPages, parallel) => {
   const parallelBatches = Math.ceil(arrPages.length / parallel)
@@ -45,20 +45,10 @@
             await page.waitForXPath("//title");
             let timeStamp = new Date(Date.now()).toUTCString();
             // Evaluate page to get all elements matching CSS selector
-            const lnx = await page.$$eval('a', as => as.map(a => [a.innerText, a.href]));
-            for (ln of lnx) {
-              /* Loop through found links and log if link text regex matches file attributes
-               E.g. Link to file (PDF, 2MB)
-               Regex101: https://regex101.com/r/158qiE/1/
-
-               Exclude KTPs which appears as a link on every page.
-              */
-              if (ln[0].match(/.+\([a-zA-Z]{3,},?(\s[0-9]{1,}\s?(K|M)B)?\)/g) && !ln[0].match(/Knowledge Transfer Partnerships \(KTPs\)/g)) {
-                let arrOut = [timeStamp, arrPages[elem], ln[0].trim(), ln[1]]
-                let strOut = arrOut.join('","')
-                console.log(`"${strOut}"`)
-              } 
-            }
+            const lnx = await page.$$eval('a', as => as.map(a => a.href));
+            let arrOut = await lnx.map(e => ['time', 'elem', e]);
+            let strOut = arrOut.map(e => ('"' + e.join('","') + '"\n'));
+            console.log(...strOut);
           } catch (err) {
             // Report failing element and standard error response
             let timeStamp = new Date(Date.now()).toUTCString();
