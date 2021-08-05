@@ -46,18 +46,16 @@
             await page.waitForXPath("//title");
             // Get element to search for and report about
             let elHandle = await page.$x("//body");
-            let timeStamp = new Date(Date.now()).toUTCString();
+            let timeStamp = new Date(Date.now()).toISOString();
             let bodyHTML = await page.evaluate(el => el.innerHTML, elHandle[0]);
             // c-nav negative match used to avoid nav items.
             if (bodyHTML.match(/(?<!higher )degree apprenticeship(?!.*?c-nav)/gmis)) {
               let locationURL = `${arrPages[elem]}#:~:text=${uriForURL}`
               console.log(`"${timeStamp}","${k}","${j}","${arrPages[elem]}","${locationURL}",""`)
-            } else {
-              console.log(`"${timeStamp}","${k}","${j}","","","ELEMENT NOT FOUND"`)
             }
           } catch (err) {
             // Report failing element and standard error response
-            let timeStamp = new Date(Date.now()).toUTCString();
+            let timeStamp = new Date(Date.now()).toISOString();
             console.log(`"${timeStamp}","${k}","${j}","${arrPages[elem]}","${err}"`)
           }
         }))
