@@ -7,7 +7,7 @@
  const puppeteer = require('puppeteer')
  const parallel = 8;
 
- const arrPages = require("../../input/test-text-anywhere.json");
+ const arrPages = require("../../input/degree-apprenticeships.json");
  const textForURL = 'degree apprenticeship';
  const uriForURL = encodeURIComponent(textForURL);
 
@@ -49,7 +49,7 @@
             let timeStamp = new Date(Date.now()).toISOString();
             let bodyHTML = await page.evaluate(el => el.innerHTML, elHandle[0]);
             // c-nav negative match used to avoid nav items.
-            if (bodyHTML.match(/(?<!higher )degree apprenticeship(?!.*?c-nav)/gmis)) {
+            if (bodyHTML.match(/(?<!higher )degree apprenticeship(?!.*?(c-nav|"Url"))/gmis)) {
               let locationURL = `${arrPages[elem]}#:~:text=${uriForURL}`
               console.log(`"${timeStamp}","${k}","${j}","${arrPages[elem]}","${locationURL}",""`)
             }
