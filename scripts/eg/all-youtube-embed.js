@@ -8,11 +8,8 @@
  const parallel = 8;
 
 // Input array of URLs
- //const arrPages = require("../../input/all-29jul2021.json")
- const arrPages = [
-  "https://www.shu.ac.uk/courses/film-and-performance/ba-honours-acting-and-performance/full-time/2021",
-  "https://www.shu.ac.uk/courses/law/llb-hons-law/part-time/2021"
- ];
+ const arrPages = require("../../input/uniyear.json")
+ 
 
  const pageScrape = async (arrPages, parallel) => {
   const parallelBatches = Math.ceil(arrPages.length / parallel)
