@@ -51,7 +51,7 @@
             console.log(...strOut);
           } catch (err) {
             // Report failing element and standard error response
-            let timeStamp = new Date(Date.now()).toUTCString();
+            let timeStamp = new Date(Date.now()).toISOString();
             console.log(`"${timeStamp}","${arrPages[elem]}","","${err}"`)
           }
         }))

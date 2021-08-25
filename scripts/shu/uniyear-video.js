@@ -16,7 +16,7 @@
   console.log('Scraping ' + arrPages.length + ' pages for shuspace links, in batches of ' + parallel)
 
   console.log(' This will result in ' + parallelBatches + ' batches.')
-  console.log('"timestamp","URL","src","Error"')
+  console.log('"timestamp","URL","SitecoreID","src","Error"')
 
   // Split up the Array of arrPages
   let k = 0
@@ -43,10 +43,13 @@
             await page.goto(arrPages[elem])
             // Element to wait for to confirm page load
             await page.waitForXPath("//title");
-            let timeStamp = new Date(Date.now()).toISOstring();
+            let timeStamp = new Date(Date.now()).toISOString();
             // Evaluate page to get all elements matching selector
+            let elGuid = await page.$x('//meta[@name="page-id"]') 
+            let guid = await page.evaluate(el => el.getAttribute('content'), elGuid[0]);
+            guid = guid.toUpperCase();
             const lnx = await page.$$eval('iframe[src*="youtube"]', as => as.map(a => a.src));
-            let arrOut = await lnx.map(e => [timeStamp, arrPages[elem], e]);
+            let arrOut = await lnx.map(e => [timeStamp, arrPages[elem], guid, e]);
             let strOut = arrOut.map(e => ('"' + e.join('","') + '"'));
             // console.log(...strOut);
             strOut.forEach(e => {
@@ -54,8 +57,8 @@
             })
           } catch (err) {
             // Report failing element and standard error response
-            let timeStamp = new Date(Date.now()).toISOstring();
-            console.log(`"${timeStamp}","${arrPages[elem]}","","${err}"`)
+            let timeStamp = new Date(Date.now()).toISOString();
+            console.log(`"${timeStamp}","${arrPages[elem]}","","","${err}"`)
           }
         }))
       }
