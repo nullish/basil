@@ -7,7 +7,7 @@
 const puppeteer = require('puppeteer');
 const parallel = 8;
 
-const arrPages = require("../../input/uni-of-the-year.json");
+const arrPages = require("../../input/uniyear.json");
 const textForURL = 'university of the year';
 const uriForURL = encodeURIComponent(textForURL);
 
