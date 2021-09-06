@@ -1,22 +1,23 @@
 /**
- * @name Unihub links
+ * @name All YouTube embed
  *
- * @desc Get all instances of Unihib links across shu.ac.uk
- */
+ * @desc Get all instances YouTube iframe embedded videos, inclusing mupltiple instances on a page 
+ * */
 
  const puppeteer = require('puppeteer')
  const parallel = 8;
 
 // Input array of URLs
- const arrPages = require("../../input/all-29jul2021.json")
+ const arrPages = require("../../input/uniyear.json")
+ 
 
  const pageScrape = async (arrPages, parallel) => {
   const parallelBatches = Math.ceil(arrPages.length / parallel)
 
-  console.log('Scraping ' + arrPages.length + ' pages for titles, in batches of ' + parallel)
+  console.log('Scraping ' + arrPages.length + ' pages for shuspace links, in batches of ' + parallel)
 
   console.log(' This will result in ' + parallelBatches + ' batches.')
-  console.log('"timestamp","URL","linkText","linkTarget","Error"')
+  console.log('"timestamp","URL","src","Error"')
 
   // Split up the Array of arrPages
   let k = 0
@@ -43,15 +44,18 @@
             await page.goto(arrPages[elem])
             // Element to wait for to confirm page load
             await page.waitForXPath("//title");
-            let timeStamp = new Date(Date.now()).toUTCString();
-            // Evaluate page to get all elements matching CSS selector
-            const lnx = await page.$$eval('a[href*="unihub"]', as => as.map(a => [a.innerText, a.href]));
-            let arrOut = await lnx.map(e => [timeStamp, arrPages[elem], e[0].trim(), e[1]]);
-            let strOut = arrOut.map(e => ('"' + e.join('","') + '"\n'));
-            console.log(...strOut);
+            let timeStamp = new Date(Date.now()).toISOstring();
+            // Evaluate page to get all elements matching selector
+            const lnx = await page.$$eval('iframe[src*="youtube"]', as => as.map(a => a.src));
+            let arrOut = await lnx.map(e => [timeStamp, arrPages[elem], e]);
+            let strOut = arrOut.map(e => ('"' + e.join('","') + '"'));
+            // console.log(...strOut);
+            strOut.forEach(e => {
+              console.log(e);
+            })
           } catch (err) {
             // Report failing element and standard error response
-            let timeStamp = new Date(Date.now()).toISOString();
+            let timeStamp = new Date(Date.now()).toISOstring();
             console.log(`"${timeStamp}","${arrPages[elem]}","","${err}"`)
           }
         }))
