@@ -54,7 +54,7 @@ const pageScrape = async (arrPages, parallel) => {
             let elHeading = await page.$x("//h1");
             let pageTitle = await page.evaluate(el => el.innerText, elTitle[0]);
             let heading = await page.evaluate(el => el.innerText, elHeading[0]);
-            let timeStamp = new Date(Date.now()).toUTCString();
+            let timeStamp = new Date(Date.now()).toISOString();
             let arrOut;
             if (res.request().redirectChain().length > 0) {
               let chain = res.request().redirectChain();
@@ -69,7 +69,7 @@ const pageScrape = async (arrPages, parallel) => {
             console.log(`"${strOut}"`)
           } catch (err) {
             // Report failing element and standard error response
-            let timeStamp = new Date(Date.now()).toUTCString();
+            let timeStamp = new Date(Date.now()).toISOString();
             console.log(`"${timeStamp}","${arrPages[elem]}","","","","","","","",""${err}"`)
           }
         }))
