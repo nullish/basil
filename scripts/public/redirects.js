@@ -9,7 +9,7 @@
 
 // Input array of URLs
 const arg = process.argv[2]
-const inputPath = arg ? "../../" + arg : "../../url/list.json"
+const inputPath = arg ? "../../" + arg : "/url/list.json";
 
 const arrPages = require(inputPath);
 
