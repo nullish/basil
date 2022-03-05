@@ -3,6 +3,7 @@ node_modules/*
 output/*
 !input
 input/*
+sitemaps/*
 cookies/*
 scripts/private/*
 
