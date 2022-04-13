@@ -8,7 +8,7 @@
  const parallel = 8;
 
  const arrPages = require("../../input/file.json");
- const textForURL = 'degree apprenticeship';
+ const textForURL = 'highlight text';
  const uriForURL = encodeURIComponent(textForURL);
 
   const pageScrape = async (arrPages, parallel) => {
