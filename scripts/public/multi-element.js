@@ -1,7 +1,7 @@
 /**
- * @name Unihub links
+ * @name Multi elements
  *
- * @desc Get all instances of Unihib links across shu.ac.uk
+ * @desc Get all instances of a DOM element matched by xpath
  */
 
  const puppeteer = require('puppeteer')
@@ -45,7 +45,7 @@
             await page.waitForXPath("//title");
             let timeStamp = new Date(Date.now()).toUTCString();
             // Evaluate page to get all elements matching CSS selector
-            const lnx = await page.$$eval('a[href*="shuspace"]', as => as.map(a => [a.innerText, a.href]));
+            const lnx = await page.$$eval('a[href*="your-value"]', as => as.map(a => [a.innerText, a.href]));
             let arrOut = await lnx.map(e => [timeStamp, arrPages[elem], e[0].trim(), e[1]]);
             let strOut = arrOut.map(e => ('"' + e.join('","') + '"'));
             // console.log(...strOut);
