@@ -8,7 +8,10 @@
  const parallel = 8;
 
 // Input array of URLs
- const arrPages = require("../../input/all-29jul2021.json")
+const arg = process.argv[2]
+const inputPath = arg ? "../../" + arg : "/url/list.json";
+
+const arrPages = require(inputPath);
 
  const pageScrape = async (arrPages, parallel) => {
   const parallelBatches = Math.ceil(arrPages.length / parallel)
