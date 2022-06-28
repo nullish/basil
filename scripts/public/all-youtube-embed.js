@@ -8,7 +8,10 @@
  const parallel = 8;
 
 // Input array of URLs
- const arrPages = require("../../input/file.json")
+ // Input array of URLs
+ const arg = process.argv[2]
+ const inputPath = arg ? "../../" + arg : "/url/list.json";
+ const arrPages = require(inputPath);
  
 
  const pageScrape = async (arrPages, parallel) => {
@@ -44,7 +47,7 @@
             await page.goto(arrPages[elem])
             // Element to wait for to confirm page load
             await page.waitForXPath("//title");
-            let timeStamp = new Date(Date.now()).toISOstring();
+            let timeStamp = new Date(Date.now()).toISOString();
             // Evaluate page to get all elements matching selector
             const lnx = await page.$$eval('iframe[src*="youtube"]', as => as.map(a => a.src));
             let arrOut = await lnx.map(e => [timeStamp, arrPages[elem], e]);
@@ -55,7 +58,7 @@
             })
           } catch (err) {
             // Report failing element and standard error response
-            let timeStamp = new Date(Date.now()).toISOstring();
+            let timeStamp = new Date(Date.now()).toISOString();
             console.log(`"${timeStamp}","${arrPages[elem]}","","${err}"`)
           }
         }))
