@@ -1,7 +1,7 @@
 /**
- * @name YouTube title scrape
+ * @name Check for element
  *
- * @desc parallel scraping array of youtube pages to get title
+ * @desc Tests for presence of a DOM element and returns true / false if it's there.
  */
 
  const puppeteer = require('puppeteer')
@@ -47,14 +47,13 @@ const arrPages = require(inputPath);
             // Element to wait for to confirm page load
             await page.waitForXPath("//title");
             // Get element to search for and report about
-            let elHandle = await page.$x("//a[contains(@class,'ytp-title-link')]");
+            let elHandle = await page.$x("//title");
             let timeStamp = new Date(Date.now()).toISOString();
             // Get attribute value to report
             if (elHandle.length > 0) {
-              let txtOut = await page.evaluate(el => el.innerText, elHandle[0]);
-              console.log(`"${timeStamp}","${k}","${j}","${arrPages[elem]}","${txtOut}",""`)
+              console.log(`"${timeStamp}","${k}","${j}","${arrPages[elem]}","true",""`)
             } else {
-              console.log(`"${timeStamp}","${k}","${j}","${arrPages[elem]}","","ELEMENT NOT FOUND"`)
+              console.log(`"${timeStamp}","${k}","${j}","${arrPages[elem]}","false",""`)
             }
           } catch (err) {
             // Report failing element and standard error response
