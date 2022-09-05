@@ -46,7 +46,7 @@ const arrPages = require(inputPath);
             await page.goto(arrPages[elem])
             // Element to wait for to confirm page load
             await page.waitForXPath("//title");
-            let timeStamp = new Date(Date.now()).toUTCString();
+            let timeStamp = new Date(Date.now()).toISOString();
             // Evaluate page to get all elements matching CSS selector
             const lnx = await page.$$eval('a[href*="your-value"]', as => as.map(a => [a.innerText, a.href]));
             let arrOut = await lnx.map(e => [timeStamp, arrPages[elem], e[0].trim(), e[1]]);
@@ -57,7 +57,7 @@ const arrPages = require(inputPath);
             })
           } catch (err) {
             // Report failing element and standard error response
-            let timeStamp = new Date(Date.now()).toUTCString();
+            let timeStamp = new Date(Date.now()).toISOString();
             console.log(`"${timeStamp}","${arrPages[elem]}","","${err}"`)
           }
         }))
