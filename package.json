@@ -7,7 +7,7 @@
     "eslint": "^7.32.0",
     "eslint-config-google": "^0.14.0",
     "last-redirect": "^1.1.0",
-    "puppeteer": "^16.2.0",
+    "puppeteer": "^19.0.0",
     "puppeteer-datalayer": "^1.0.2"
   },
   "scripts": {
