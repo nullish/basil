@@ -1,7 +1,7 @@
 /**
- * @name Multi elements
+ * @name Cookies All
  *
- * @desc Get all instances of a DOM element matched by xpath
+ * @desc Get details of every cookie on a user provided list of pages.
  */
 
  const puppeteer = require('puppeteer')
@@ -19,7 +19,7 @@ const arrPages = require(inputPath);
   console.log('Scraping ' + arrPages.length + ' pages in batches of ' + parallel)
 
   console.log(' This will result in ' + parallelBatches + ' batches.')
-  console.log('"timestamp","URL","linkText","linkTarget","Error"')
+  console.log('"timestamp","URL","name","value","domain","path","expires","secure","session","sourceScheme","sourcePort","Error"')
 
   // Split up the Array of arrPages
   let k = 0
@@ -48,8 +48,7 @@ const arrPages = require(inputPath);
             let timeStamp = new Date(Date.now()).toISOString();
             // Get all cookies for page
             const cookies = await page.cookies();
-            const lnx = await page.$$eval('a[href*="/study"]', as => as.map(a => [a.innerText, a.href]));
-            let arrOut = await lnx.map(e => [timeStamp, arrPages[elem], e[0].trim(), e[1]]);
+            let arrOut = await cookies.map(e => [timeStamp, arrPages[elem], e.name, e.value, e.domain, e.path, e.expires, e.secure, e.session, e.sourceScheme, e.sourcePort]);
             let strOut = arrOut.map(e => ('"' + e.join('","') + '"'));
             //console.log(...strOut);
             strOut.forEach(e => {
@@ -58,7 +57,7 @@ const arrPages = require(inputPath);
           } catch (err) {
             // Report failing element and standard error response
             let timeStamp = new Date(Date.now()).toISOString();
-            console.log(`"${timeStamp}","${arrPages[elem]}","","${err}"`)
+            console.log(`"${timeStamp}","${arrPages[elem]}","","","","","","","","","","ERR_PLACEHOLD:${err}"`)
           }
         }))
       }
