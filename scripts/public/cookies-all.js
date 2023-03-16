@@ -19,7 +19,7 @@ const arrPages = require(inputPath);
   console.log('Scraping ' + arrPages.length + ' pages in batches of ' + parallel)
 
   console.log(' This will result in ' + parallelBatches + ' batches.')
-  console.log('"timestamp","URL","name","value","domain","path","expires","secure","session","sourceScheme","sourcePort","Error"')
+  console.log('"timestamp","URL","title","name","value","domain","path","expires","secure","session","sourceScheme","sourcePort","Error"')
 
   // Split up the Array of arrPages
   let k = 0
@@ -45,6 +45,7 @@ const arrPages = require(inputPath);
             await page.goto(arrPages[elem], {
               waitUntil: "networkidle2",
             });
+            const pageTitle = await page.title();
             let timeStamp = new Date(Date.now()).toISOString();
             // Get all cookies for page. Uses Chrome Developer Tools (CDP) session to access devtools and retieve 3rd party cookies.
             const client = await page.target().createCDPSession();
@@ -53,7 +54,7 @@ const arrPages = require(inputPath);
             /* Use when only 1st party cookies are required
             const cookies = await page.cookies();
             */ 
-            let arrOut = await cookies.map(e => [timeStamp, arrPages[elem], e.name, e.value, e.domain, e.path, e.expires, e.secure, e.session, e.sourceScheme, e.sourcePort]);
+            let arrOut = await cookies.map(e => [timeStamp, arrPages[elem], pageTitle, e.name, e.value, e.domain, e.path, e.expires, e.secure, e.session, e.sourceScheme, e.sourcePort]);
             let strOut = arrOut.map(e => ('"' + e.join('","') + '"'));
             //console.log(...strOut);
             strOut.forEach(e => {
@@ -62,7 +63,7 @@ const arrPages = require(inputPath);
           } catch (err) {
             // Report failing element and standard error response
             let timeStamp = new Date(Date.now()).toISOString();
-            console.log(`"${timeStamp}","${arrPages[elem]}","","","","","","","","","","ERR_PLACEHOLD:${err}"`)
+            console.log(`"${timeStamp}","${arrPages[elem]}","","","","","","","","","","","ERR_PLACEHOLD:${err}"`)
           }
         }))
       }
