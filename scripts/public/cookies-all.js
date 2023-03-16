@@ -46,8 +46,12 @@ const arrPages = require(inputPath);
               waitUntil: "networkidle2",
             });
             let timeStamp = new Date(Date.now()).toISOString();
-            // Get all cookies for page
+            // Get all cookies for page. Uses Chrome Developer Tools (CDP) session to access devtools and retieve 3rd party cookies.
+            const client = await page.target().createCDPSession();
+            const cookies = (await client.send('Network.getAllCookies')).cookies;
+            /* Use when only 1st party cookies are required
             const cookies = await page.cookies();
+            */ 
             let arrOut = await cookies.map(e => [timeStamp, arrPages[elem], e.name, e.value, e.domain, e.path, e.expires, e.secure, e.session, e.sourceScheme, e.sourcePort]);
             let strOut = arrOut.map(e => ('"' + e.join('","') + '"'));
             //console.log(...strOut);
