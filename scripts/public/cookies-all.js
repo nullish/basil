@@ -48,7 +48,7 @@ const arrPages = require(inputPath);
             let timeStamp = new Date(Date.now()).toISOString();
             // Get all cookies for page. Uses Chrome Developer Tools (CDP) session to access devtools and retieve 3rd party cookies.
             const client = await page.target().createCDPSession();
-            const cookies = (await client.send('Network.getAllCookies')).cookies;
+            const cookies = (await client.send('Storage.getCookies')).cookies;
             /* Use when only 1st party cookies are required
             const cookies = await page.cookies();
             */ 
