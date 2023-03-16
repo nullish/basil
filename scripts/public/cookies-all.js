@@ -49,6 +49,7 @@ const arrPages = require(inputPath);
             // Get all cookies for page. Uses Chrome Developer Tools (CDP) session to access devtools and retieve 3rd party cookies.
             const client = await page.target().createCDPSession();
             const cookies = (await client.send('Storage.getCookies')).cookies;
+            await client.detach();
             /* Use when only 1st party cookies are required
             const cookies = await page.cookies();
             */ 
