@@ -55,7 +55,7 @@ const arrPages = require(inputPath);
             const cookies = await page.cookies();
             */ 
             let arrOut = await cookies.map(e => [timeStamp, arrPages[elem], pageTitle, e.name, e.value, e.domain, e.path, e.expires, e.secure, e.session, e.sourceScheme, e.sourcePort]);
-            let strOut = arrOut.map(e => ('"' + e.join('","') + '"'));
+            let strOut = arrOut.map(e => ('"' + e.join('","') + '",""'));
             //console.log(...strOut);
             strOut.forEach(e => {
               console.log(e);
@@ -63,7 +63,7 @@ const arrPages = require(inputPath);
           } catch (err) {
             // Report failing element and standard error response
             let timeStamp = new Date(Date.now()).toISOString();
-            console.log(`"${timeStamp}","${arrPages[elem]}","","","","","","","","","","","ERR_PLACEHOLD:${err}"`)
+            console.log(`"${timeStamp}","${arrPages[elem]}","","","","","","","","","","","${err}"`)
           }
         }))
       }
