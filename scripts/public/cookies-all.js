@@ -55,7 +55,9 @@ const arrPages = require(inputPath);
             const cookies = await page.cookies();
             */ 
             let arrOut = await cookies.map(e => [timeStamp, arrPages[elem], pageTitle, e.name, e.value, e.domain, e.path, e.expires, e.secure, e.session, e.sourceScheme, e.sourcePort]);
-            let strOut = arrOut.map(e => ('"' + e.join('","') + '",""'));
+            // remove double quotes and commas from all elements to prevent delimiter problems in CSV.
+            let arrClean = arrOut.map(subArray => [...subArray].map(e => typeof(e) == "string" ? e.replace(/"|,/g, "") : e));
+            let strOut = arrClean.map(e => ('"' + e.join('","') + '",""'));
             //console.log(...strOut);
             strOut.forEach(e => {
               console.log(e);
