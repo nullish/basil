@@ -50,8 +50,7 @@ const pageScrape = async (arrPages, parallel) => {
             let stText = res.statusText();
             let resUrl = res.url(); 
 
-            // Element to wait for to confirm page load
-            await page.waitForXPath("//title");
+            
             let elTitle = await page.$x("//title");
             let elHeading = await page.$x("//h1");
             let pageTitle = await page.evaluate(el => el.innerText, elTitle[0]);

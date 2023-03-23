@@ -47,8 +47,7 @@
             await page.goto(arrPages[elem], {
               waitUntil: "networkidle2",
             });
-            // Element to wait for to confirm page load
-            await page.waitForXPath("//title");
+            
             let timeStamp = new Date(Date.now()).toISOString();
             // Evaluate page to get all elements matching selector
             const lnx = await page.$$eval('iframe[src*="youtube"]', as => as.map(a => a.src));

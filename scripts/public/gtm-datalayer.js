@@ -49,8 +49,7 @@ const pageScrape = async (arrPages, parallel) => {
                         await page.goto(arrPages[elem], {
               waitUntil: "networkidle2",
             });
-                        // Element to wait for to confirm page load
-                        await page.waitForXPath("//title");
+                        
                         let timeStamp = new Date(Date.now()).toISOString();
                         const dlGTM = new puppeteerDataLayer(page, containerID);
                         /* Uncomment for testing which variables you want to scrape

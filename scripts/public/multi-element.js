@@ -46,8 +46,7 @@ const arrPages = require(inputPath);
             await page.goto(arrPages[elem], {
               waitUntil: "networkidle2",
             });
-            // Element to wait for to confirm page load
-            await page.waitForXPath("//title");
+            
             let timeStamp = new Date(Date.now()).toISOString();
             // Evaluate page to get all elements matching CSS selector
             const lnx = await page.$$eval('a[href*="your-value"]', as => as.map(a => [a.innerText, a.href]));

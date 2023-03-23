@@ -44,8 +44,7 @@
             await page.goto(arrPages[elem], {
               waitUntil: "networkidle2",
             });
-            // Element to wait for to confirm page load
-            await page.waitForXPath("//title");
+            
             // Get element to search for and report about
             let elHandle = await page.$x("//body");
             let timeStamp = new Date(Date.now()).toISOString();
