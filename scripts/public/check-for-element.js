@@ -19,7 +19,7 @@ const arrPages = require(inputPath);
     console.log('Scraping ' + arrPages.length + ' pages for titles, in batches of ' + parallel)
 
     console.log(' This will result in ' + parallelBatches + ' batches.')
-    console.log('"timestamp","batch","index","URL","Title","Error"')
+    console.log('"timestamp","batch","index","URL","Present","Error"')
 
   // Split up the Array of arrPages
   let k = 0
