@@ -43,9 +43,10 @@ const arrPages = require(inputPath);
             // Set default navigation timeout.
             await page.setDefaultNavigationTimeout(30000); 
             // Goto page, wait for timeout as specified in JSON input
-            await page.goto(arrPages[elem])
-            // Element to wait for to confirm page load
-            await page.waitForXPath("//title");
+            await page.goto(arrPages[elem], {
+              waitUntil: "networkidle2",
+            });
+            
             let timeStamp = new Date(Date.now()).toISOString();
             // Evaluate page to get all elements matching CSS selector
             const lnx = await page.$$eval('div.fluidvids', as => as.map(a => [a.innerHTML]));

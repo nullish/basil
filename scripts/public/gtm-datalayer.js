@@ -46,9 +46,10 @@ const pageScrape = async (arrPages, parallel) => {
                         // Set default navigation timeout.
                         await page.setDefaultNavigationTimeout(30000);
                         // Goto page, wait for timeout as specified in JSON input
-                        await page.goto(arrPages[elem]);
-                        // Element to wait for to confirm page load
-                        await page.waitForXPath("//title");
+                        await page.goto(arrPages[elem], {
+              waitUntil: "networkidle2",
+            });
+                        
                         let timeStamp = new Date(Date.now()).toISOString();
                         const dlGTM = new puppeteerDataLayer(page, containerID);
                         /* Uncomment for testing which variables you want to scrape

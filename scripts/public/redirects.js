@@ -43,13 +43,14 @@ const pageScrape = async (arrPages, parallel) => {
             // Set default navigation timeout.
             await page.setDefaultNavigationTimeout(30000); 
             // Goto page, wait for timeout as specified in JSON input
-            let res = await page.goto(arrPages[elem])
+            let res = await page.goto(arrPages[elem], {
+              waitUntil: "networkidle2",
+            });
             let stCode = res.status();
             let stText = res.statusText();
             let resUrl = res.url(); 
 
-            // Element to wait for to confirm page load
-            await page.waitForXPath("//title");
+            
             let elTitle = await page.$x("//title");
             let elHeading = await page.$x("//h1");
             let pageTitle = await page.evaluate(el => el.innerText, elTitle[0]);
