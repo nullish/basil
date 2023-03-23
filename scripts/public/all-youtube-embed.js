@@ -44,7 +44,9 @@
             // Set default navigation timeout.
             await page.setDefaultNavigationTimeout(30000); 
             // Goto page, wait for timeout as specified in JSON input
-            await page.goto(arrPages[elem])
+            await page.goto(arrPages[elem], {
+              waitUntil: "networkidle2",
+            });
             // Element to wait for to confirm page load
             await page.waitForXPath("//title");
             let timeStamp = new Date(Date.now()).toISOString();
