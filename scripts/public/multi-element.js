@@ -50,7 +50,7 @@ const arrPages = require(inputPath);
             let timeStamp = new Date(Date.now()).toISOString();
             // Evaluate page to get all elements matching CSS selector
             const lnx = await page.$$eval('a[href*="your-value"]', as => as.map(a => [a.innerText, a.href]));
-            let arrOut = await lnx.map(e => [timeStamp, arrPages[elem], e[0].trim(), e[1]]);
+            let arrOut = await lnx.map(e => [timeStamp, arrPages[elem], e[0].trim().replace(/\n/g, " "), e[1]]);
             let strOut = arrOut.map(e => ('"' + e.join('","') + '"'));
             // console.log(...strOut);
             strOut.forEach(e => {
