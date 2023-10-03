@@ -80,7 +80,7 @@ const arrPages = require(inputPath);
             // Format all links for consistent use of trailing slash
             let cleanLnx = await arrayAppendSlash(lnx);
             let matchedLnx = await arrayLocate(arrCleanInputLinks, cleanLnx);
-            let arrOut = await matchedLnx.map(e => [timeStamp, arrPages[elem], e[0]]);
+            let arrOut = await matchedLnx.map(e => [timeStamp, arrPages[elem], e]);
             let strOut = arrOut.map(e => ('"' + e.join('","') + '"'));
             // console.log(...strOut);
             strOut.forEach(e => {

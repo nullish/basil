@@ -11,7 +11,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "args": ["./input/sbs-sitemap.json", "./input/su-links.json"],
+            "args": ["./input/sbs-sitemap.json", "./input/test-link-array.json"],
             "program": "${workspaceFolder}/scripts/public/match-link-array.js"
         }
     ]
