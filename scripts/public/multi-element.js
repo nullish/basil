@@ -41,7 +41,7 @@ const arrPages = require(inputPath);
         promises.push(browser.newPage().then(async page => {          
           try {
             // Set default navigation timeout.
-            await page.setDefaultNavigationTimeout(30000); 
+            page.setDefaultNavigationTimeout(30000); 
             // Goto page, wait for timeout as specified in JSON input
             await page.goto(arrPages[elem], {
               waitUntil: "networkidle2",
@@ -49,9 +49,11 @@ const arrPages = require(inputPath);
             
             let timeStamp = new Date(Date.now()).toISOString();
             // Evaluate page to get all elements matching CSS selector
-            const lnx = await page.$$eval('a[href*="your-value"]', as => as.map(a => [a.innerText, a.href]));
-            let arrOut = await lnx.map(e => [timeStamp, arrPages[elem], e[0].trim().replace(/\n/g, " "), e[1]]);
-            let strOut = arrOut.map(e => ('"' + e.join('","') + '"'));
+            const lnx = await page.$$eval('a[href*="hallamstudentsunion"]', as => as.map(a => [a.innerText, a.href]));
+            let arrOut = lnx.map(e => [timeStamp, arrPages[elem], e[0].trim().replace(/\n/g, " "), e[1]]);
+            let strOut = arrOut.length > 0 ?
+             arrOut.map(e => ('"' + e.join('","') + '"')) :
+             [`"${timeStamp}","${arrPages[elem]}","","","NOTHING FOUND"`];
             // console.log(...strOut);
             strOut.forEach(e => {
               console.log(e);

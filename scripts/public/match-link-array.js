@@ -46,7 +46,7 @@ const arrPages = require(inputPath);
     console.log('Scraping ' + arrPages.length + ' pages for titles, in batches of ' + parallel)
 
     console.log(' This will result in ' + parallelBatches + ' batches.')
-    console.log('"timestamp","batch","index","URL","Value","Error"')
+    console.log('"timestamp","URL","Link URL","Error"')
 
   // Split up the Array of arrPages
   let k = 0
@@ -81,7 +81,9 @@ const arrPages = require(inputPath);
             let cleanLnx = await arrayAppendSlash(lnx);
             let matchedLnx = await arrayLocate(arrCleanInputLinks, cleanLnx);
             let arrOut = await matchedLnx.map(e => [timeStamp, arrPages[elem], e]);
-            let strOut = arrOut.map(e => ('"' + e.join('","') + '"'));
+            let strOut = arrOut.length > 0 ?
+             arrOut.map(e => ('"' + e.join('","') + '"')) :
+             [`"${timeStamp}","${arrPages[elem]}","","NOTHING FOUND"`];
             // console.log(...strOut);
             strOut.forEach(e => {
               console.log(e);
@@ -89,7 +91,7 @@ const arrPages = require(inputPath);
           } catch (err) {
             // Report failing element and standard error response
             let timeStamp = new Date(Date.now()).toISOString();
-            console.log(`"${timeStamp}","${k}","${j}","${arrPages[elem]}","","${err}"`)
+            console.log(`"${timeStamp}","${arrPages[elem]}","","${err}"`)
           }
         }))
       }
