@@ -29,7 +29,7 @@ const pageScrape = async (arrPages, parallel) => {
     for (let i = 0; i < arrPages.length; i += parallel) {
         k++;
         // Launch and Setup Chromium
-        const browser = await puppeteer.launch();
+        const browser = await puppeteer.launch({headless: "new"});
         const context = await browser.createIncognitoBrowserContext();
         const page = await context.newPage();
         page.setJavaScriptEnabled(true);
