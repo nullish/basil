@@ -1,0 +1,11 @@
+{
+    "instances": 4,
+    "input": "./input/file.json",
+    "script": {
+        "name": "get-element",
+        "params": 
+        [
+            {"key": "element", "value": "//title"}
+        ]
+    }
+}
