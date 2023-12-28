@@ -9,6 +9,7 @@ const yargs = require('yargs');
 const paramConfig = process.argv[2];
 const strConfig = paramConfig.match(/\.\//) ? paramConfig : './' + paramConfig;
 const config = require(strConfig);
+const basilScript = require(`./scripts/${config.script.name}`);
 
 console.log(config);
 
@@ -39,6 +40,11 @@ const output = argv.output || config.output;
 const sitemap = argv.sitemap || config.sitemap;
 
 // Load script specifc variables
-const scriptParams = config.scipt.params;
+const scriptParams = config.script.params;
 
 console.log(instances, input, output, sitemap);
+
+/** @example Run getElement from here */
+
+//basilGetElement(arrPages, parallel);
+return basilScript(scriptParams);

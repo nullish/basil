@@ -3,7 +3,7 @@
     "input": "./input/file.json",
     "output": "./output/file.csv",
     "script": {
-        "name": "get-element",
+        "name": "getElement",
         "params": 
         [
             {"key": "element", "value": "//title"}
