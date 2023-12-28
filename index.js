@@ -38,4 +38,7 @@ const input = argv.input || config.input;
 const output = argv.output || config.output;
 const sitemap = argv.sitemap || config.sitemap;
 
+// Load script specifc variables
+const scriptParams = config.scipt.params;
+
 console.log(instances, input, output, sitemap);
