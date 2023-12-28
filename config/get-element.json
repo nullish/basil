@@ -1,6 +1,7 @@
 {
     "instances": 4,
     "input": "./input/file.json",
+    "output": "./output/file.csv",
     "script": {
         "name": "get-element",
         "params": 
