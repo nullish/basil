@@ -4,11 +4,11 @@
  * @desc Get specified attribute value of an element
  */
 
- const puppeteer = require('puppeteer')
+ const puppeteer = require('puppeteer');
  const parallel = 8;
 
  // Input array of URLs
-const arg = process.argv[2]
+const arg = process.argv[2];
 const inputPath = arg ? "../../" + arg : "/url/list.json";
 
 const arrPages = require(inputPath);
@@ -16,29 +16,29 @@ const arrPages = require(inputPath);
   const pageScrape = async (arrPages, parallel) => {
     const parallelBatches = Math.ceil(arrPages.length / parallel)
 
-    console.log('Scraping ' + arrPages.length + ' pages for titles, in batches of ' + parallel)
+    console.log('Scraping ' + arrPages.length + ' pages for titles, in batches of ' + parallel);
 
-    console.log(' This will result in ' + parallelBatches + ' batches.')
-    console.log('"timestamp","batch","index","URL","Value","Error"')
+    console.log(' This will result in ' + parallelBatches + ' batches.');
+    console.log('"timestamp","batch","index","URL","Value","Error"');
 
   // Split up the Array of arrPages
-  let k = 0
+  let k = 0;
   for (let i = 0; i < arrPages.length; i += parallel) {
-    k++
+    k++;
     // Launch and Setup Chromium
     const browser = await puppeteer.launch();
     const context = await browser.createIncognitoBrowserContext();
     const page = await context.newPage();
     page.setJavaScriptEnabled(true)
 
-    const promises = []
+    const promises = [];
     for (let j = 0; j < parallel; j++) {
-      let elem = i + j
+      let elem = i + j;
       // only proceed if there is an element 
       if (arrPages[elem] != undefined) {
         // Promise to scrape pages
         // promises push
-        promises.push(browser.newPage().then(async page => {          
+        promises.push(browser.newPage().then(async page => {
           try {
             // Set default navigation timeout.
             await page.setDefaultNavigationTimeout(30000); 
@@ -46,7 +46,6 @@ const arrPages = require(inputPath);
             await page.goto(arrPages[elem], {
               waitUntil: "networkidle2",
             });
-            
             // Get element to search for and report about
             let elHandle = await page.$x("//div[contains(@class, 'image-row')]");
             let timeStamp = new Date(Date.now()).toISOString();
@@ -61,16 +60,16 @@ const arrPages = require(inputPath);
           } catch (err) {
             // Report failing element and standard error response
             let timeStamp = new Date(Date.now()).toISOString();
-            console.log(`"${timeStamp}","${k}","${j}","${arrPages[elem]}","","${err}"`)
+            console.log(`"${timeStamp}","${k}","${j}","${arrPages[elem]}","","${err}"`);
           }
-        }))
+        }));
       }
     }
 
     // await promise all and close browser
-    await Promise.all(promises)
-    await browser.close()
+    await Promise.all(promises);
+    await browser.close();
   }
-}
+};
 
-pageScrape(arrPages, parallel)
+pageScrape(arrPages, parallel);
