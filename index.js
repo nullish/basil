@@ -8,43 +8,38 @@ const yargs = require('yargs');
 // Load config file
 const paramConfig = process.argv[2];
 const strConfig = paramConfig.match(/\.\//) ? paramConfig : './' + paramConfig;
-const config = require(strConfig);
+let config = require(strConfig);
 const basilScript = require(`./scripts/${config.script.name}`);
-
-console.log(config);
 
 // Get overrides from command line
 const argv = yargs
-    .option('instances', {
+    .option('parallel', {
         describe: 'Number of parallel instances',
-        type: 'number'
+        type: 'number',
     })
     .option('input', {
         describe: 'File path to JSON list of URLs to scrape',
-        type: 'string'
+        type: 'string',
     })
     .option('output', {
         describe: 'File path to CSV of output from script',
-        type: 'string'
+        type: 'string',
     })
     .option('sitemap', {
         describe: 'URL of sitemap to use as input ',
-        type: 'string'
+        type: 'string',
     })
     .argv;
 
 // Set properties, preferring command line params over config file where supplied.
-const instances = argv.instances || config.instances;
-const input = argv.input || config.input;
-const output = argv.output || config.output;
-const sitemap = argv.sitemap || config.sitemap;
+config.parallel = argv.parallel || config.parallel;
+config.input = argv.input || config.input;
+config.output = argv.output || config.output;
+config.sitemap = argv.sitemap || config.sitemap;
 
-// Load script specifc variables
-const scriptParams = config.script.params;
-
-console.log(instances, input, output, sitemap);
+console.log(config);
 
 /** @example Run getElement from here */
 
 //basilGetElement(arrPages, parallel);
-return basilScript(scriptParams);
+return basilScript(config);
