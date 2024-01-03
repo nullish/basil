@@ -6,8 +6,8 @@
         "name": "getElement",
         "params": 
         [
-            {"key": "element", "value": "(//h2)[1]"},
-            {"key": "attribute", "value": "class"}
+            {"key": "element", "value": "//li/a[contains(@class, 'pill')]"},
+            {"key": "attribute", "value": "innerHTML"}
         ]
     }
 }

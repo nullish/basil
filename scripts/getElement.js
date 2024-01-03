@@ -57,11 +57,23 @@ const basilGetElement = async (args) => {
               let timeStamp = new Date(Date.now()).toISOString();
               // Get attribute value to report
               if (elHandle.length > 0) {
-                let txtOut = await page.evaluate((el, a) => el.getAttribute(a), elHandle[0], confAttr);
-                txtOut = txtOut.replace(/\n/g, "");
-                console.log(
-                  `"${timeStamp}","${k}","${j}","${arrPages[elem]}","${txtOut}",""`
-                );
+                let txtOut;
+                switch (confAttr) {
+                  case "innerText":
+                  txtOut = await page.evaluate((el) => el.innerText, elHandle[0]);
+                  txtOut = txtOut.replace(/\n/g, "");
+                  console.log(`"${timeStamp}","${k}","${j}","${arrPages[elem]}","${txtOut}",""`);
+                  break;
+                  case "innerHTML":
+                  txtOut = await page.evaluate((el) => el.innerHTML, elHandle[0]);
+                  txtOut = txtOut.replace(/\n/g, "");
+                  console.log(`"${timeStamp}","${k}","${j}","${arrPages[elem]}","${txtOut}",""`);
+                  break;
+                  default:
+                  txtOut = await page.evaluate((el,a) => el.getAttribute(a), elHandle[0], confAttr);
+                  txtOut = txtOut.replace(/\n/g, "");
+                  console.log(`"${timeStamp}","${k}","${j}","${arrPages[elem]}","${txtOut}",""`);
+                }
               } else {
                 console.log(
                   `"${timeStamp}","${k}","${j}","${arrPages[elem]}","","ELEMENT NOT FOUND"`
