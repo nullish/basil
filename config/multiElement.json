@@ -1,0 +1,12 @@
+{
+    "parallel": 8,
+    "input": "./input/staff.json",
+    "output": "./output/dept.csv",
+    "script": {
+        "name": "multiElement",
+        "params": 
+        [
+            {"key": "element", "value": "a[href*=\"https://www.shu.ac.uk/about-us/academic-departments/\"]"}
+        ]
+    }
+}

@@ -4,17 +4,14 @@
  * @desc Get all instances of a DOM element matched by xpath
  */
 
- const puppeteer = require('puppeteer')
- const parallel = 8;
+const puppeteer = require("puppeteer");
 
-// Input array of URLs
-const arg = process.argv[2]
-const inputPath = arg ? "../../" + arg : "/url/list.json";
-
-const arrPages = require(inputPath);
-
- const pageScrape = async (arrPages, parallel) => {
-  const parallelBatches = Math.ceil(arrPages.length / parallel)
+const basilMultiElement = async (args) => {
+  const {parallel, input, output, script} = args; // Passed from index.js containing specifics for the scrape
+  const inputPath = input.match(/\.\.\//) ? input : '../' + input;
+  const arrPages = require(inputPath);
+  const parallelBatches = Math.ceil(arrPages.length / parallel);
+  const confEl = script.params.find(e => e.key == 'element').value;
 
   console.log('Scraping ' + arrPages.length + ' pages for shuspace links, in batches of ' + parallel)
 
@@ -49,7 +46,7 @@ const arrPages = require(inputPath);
             
             let timeStamp = new Date(Date.now()).toISOString();
             // Evaluate page to get all elements matching CSS selector
-            const lnx = await page.$$eval('a[href*="your-value"]', as => as.map(a => [a.innerText, a.href]));
+            const lnx = await page.$$eval(confEl, as => as.map(a => [a.innerText, a.href]));
             let arrOut = await lnx.map(e => [timeStamp, arrPages[elem], e[0].trim(), e[1]]);
             let strOut = arrOut.map(e => ('"' + e.join('","') + '"'));
             // console.log(...strOut);
@@ -71,4 +68,4 @@ const arrPages = require(inputPath);
   }
 }
 
-pageScrape(arrPages, parallel)
+module.exports = basilMultiElement;

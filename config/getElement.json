@@ -1,5 +1,5 @@
 {
-    "parallel": 4,
+    "parallel": 8,
     "input": "./input/staff.json",
     "output": "./output/file.csv",
     "script": {

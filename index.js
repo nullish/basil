@@ -39,7 +39,4 @@ config.sitemap = argv.sitemap || config.sitemap;
 
 console.log(config);
 
-/** @example Run getElement from here */
-
-//basilGetElement(arrPages, parallel);
 return basilScript(config);
