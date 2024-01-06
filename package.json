@@ -12,7 +12,7 @@
     "yargs": "^17.7.2"
   },
   "scripts": {
-    "basil": "node index.js ./config/get-element.js", 
+    "basil": "node index.js", 
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
