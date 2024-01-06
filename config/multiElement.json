@@ -1,12 +1,12 @@
 {
     "parallel": 8,
-    "input": "./input/staff.json",
-    "output": "./output/dept.csv",
+    "input": "./input/bus.json",
+    "output": "./output/business-media.csv",
     "script": {
         "name": "multiElement",
         "params": 
         [
-            {"key": "element", "value": "a[href*=\"https://www.shu.ac.uk/about-us/academic-departments/\"]"}
+            {"key": "element", "value": "a[href*=\"https://www.shu.ac.uk/-/media/home/business/\"]"}
         ]
     }
 }

@@ -49,10 +49,13 @@ const basilMultiElement = async (args) => {
             const lnx = await page.$$eval(confEl, as => as.map(a => [a.innerText, a.href]));
             let arrOut = await lnx.map(e => [timeStamp, arrPages[elem], e[0].trim(), e[1]]);
             let strOut = arrOut.map(e => ('"' + e.join('","') + '"'));
-            // console.log(...strOut);
             strOut.forEach(e => {
               console.log(e);
             })
+            // Log if element not found
+            if (strOut.length == 0) {
+              console.log(`"${timeStamp}","${arrPages[elem]}","ELEMENT NOT FOUND",""`);
+            }
           } catch (err) {
             // Report failing element and standard error response
             let timeStamp = new Date(Date.now()).toISOString();
