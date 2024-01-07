@@ -9,10 +9,11 @@
     "last-redirect": "^1.1.0",
     "puppeteer": "^19.0.0",
     "puppeteer-datalayer": "^1.0.2",
+    "xml2json": "^0.12.0",
     "yargs": "^17.7.2"
   },
   "scripts": {
-    "basil": "node index.js", 
+    "basil": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

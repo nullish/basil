@@ -5,6 +5,7 @@ output/*
 !input
 input/*
 sitemaps/*
+tmp/*
 cookies/*
 scripts/private/*
 
