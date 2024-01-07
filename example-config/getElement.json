@@ -1,6 +1,6 @@
 {
     "parallel": 8,
-    "input": "",
+    "input": "input/testswitch.json",
     "urlSitemap": "https://www.shu.ac.uk/sitemap",
     "output": "./output/file.csv",
     "script": {

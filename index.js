@@ -37,6 +37,6 @@ config.input = argv.input || config.input;
 config.output = argv.output || config.output;
 config.urlSitemap = argv.urlSitemap || config.urlSitemap;
 
-//console.log(config);
+console.log(config);
 
 return basilScript(config);

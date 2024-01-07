@@ -10,7 +10,7 @@ const handleSitemap = require('../handleSitemap'); // processes sitemaap from we
 const basilGetElement = async (args) => {
   const {parallel, input, urlSitemap, output, script} = args; // Passed from index.js containing specifics for the scrape
   let inputPath;
-  if (input.length > 0) { inputPath = input.match(/\.\.\//) ? input : '../' + input };
+  if (typeof(input) !== 'undefined') { inputPath = input.match(/\.\.\//) ? input : '../' + input };
   const confEl = script.params.find(e => e.key == 'element').value;
   const confAttr = script.params.find(e => e.key == 'attribute').value;
 
