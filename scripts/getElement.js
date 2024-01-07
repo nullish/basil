@@ -5,14 +5,24 @@
  */
 
 const puppeteer = require("puppeteer");
+const handleSitemap = require('../handleSitemap'); // processes sitemaap from web into JSON input
 
 const basilGetElement = async (args) => {
-  const {parallel, input, output, script} = args; // Passed from index.js containing specifics for the scrape
-  const inputPath = input.match(/\.\.\//) ? input : '../' + input;
-  const arrPages = require(inputPath);
-  const parallelBatches = Math.ceil(arrPages.length / parallel);
+  const {parallel, input, urlSitemap, output, script} = args; // Passed from index.js containing specifics for the scrape
+  let inputPath;
+  if (input.length > 0) { inputPath = input.match(/\.\.\//) ? input : '../' + input };
   const confEl = script.params.find(e => e.key == 'element').value;
   const confAttr = script.params.find(e => e.key == 'attribute').value;
+
+  // Get input of URLs from input path or sitemap URL. Input path takes precedence.
+  let arrPages;
+  if (inputPath) {
+    arrPages = require(inputPath);
+  } else {
+    handleSitemap(urlSitemap);
+    arrPages = require('../input/sitemap.json');
+  };
+  const parallelBatches = Math.ceil(arrPages.length / parallel);
 
   console.log(
     "Scraping " +
