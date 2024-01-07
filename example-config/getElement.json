@@ -1,6 +1,7 @@
 {
     "parallel": 8,
-    "input": "./input/staff.json",
+    "input": "",
+    "urlSitemap": "https://www.shu.ac.uk/sitemap",
     "output": "./output/file.csv",
     "script": {
         "name": "getElement",

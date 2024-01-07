@@ -25,7 +25,7 @@ const argv = yargs
         describe: 'File path to CSV of output from script',
         type: 'string',
     })
-    .option('sitemap', {
+    .option('urlSitemap', {
         describe: 'URL of sitemap to use as input ',
         type: 'string',
     })
@@ -35,8 +35,8 @@ const argv = yargs
 config.parallel = argv.parallel || config.parallel;
 config.input = argv.input || config.input;
 config.output = argv.output || config.output;
-config.sitemap = argv.sitemap || config.sitemap;
+config.urlSitemap = argv.urlSitemap || config.urlSitemap;
 
-console.log(config);
+//console.log(config);
 
 return basilScript(config);

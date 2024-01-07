@@ -1,12 +1,17 @@
-/** @file Convert sitemap
- * Downloads a sitemap from web and converts to JSON for use by Basil script
+/** @file Handle sitemap
+ * @description Downloads a sitemap from web and converts to JSON for use by Basil script
  */
 
 const https = require("https");
 const fs = require("fs");
 const parser = require("xml2json");
+const { updateLocale } = require("yargs");
 
 const handleSitemap = (urlSitemap) => {
+  /** @function Convert sitemap
+   * @param urlSitemap
+   * Downloads a sitemap from web and converts to JSON for use by Basil script
+   */
   const convertSitemap = () => {
     /** @function convertSitemap
      * Code to parse XML from tmp and output as
@@ -37,16 +42,17 @@ const handleSitemap = (urlSitemap) => {
       writer.write("]\n");
       writer.end();
       console.log("Sitemap converted");
+      const sitemap = require(filePath);
       return true;
     } catch (error) {
       console.log(error);
-      return false;
+      return error;
     }
   };
 
   const downloadSitemap = (urlSitemap, callBack) => {
     /** @function downloadSitemap
-     * Donload sitemap XML from web to local file system
+     * Download sitemap XML from web to local file system
      * @param urlSitemap 
      * @param callBack
      */
@@ -70,4 +76,4 @@ const handleSitemap = (urlSitemap) => {
   downloadSitemap(urlSitemap, convertSitemap);
 };
 
-module.exports = handleSitemap();
+module.exports = handleSitemap;
