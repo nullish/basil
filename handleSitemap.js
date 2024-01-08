@@ -42,7 +42,6 @@ const handleSitemap = (urlSitemap) => {
       writer.write("]\n");
       writer.end();
       console.log("Sitemap converted");
-      const sitemap = require(filePath);
       return true;
     } catch (error) {
       console.log(error);
@@ -77,3 +76,5 @@ const handleSitemap = (urlSitemap) => {
 };
 
 module.exports = handleSitemap;
+//handleSitemap("https://www.shu.ac.uk/sitemap");
+

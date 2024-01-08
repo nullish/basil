@@ -1,7 +1,7 @@
 {
     "parallel": 8,
     "input": "./input/bus.json",
-    "output": "./output/business-media.csv",
+    "urlSitemap": "https://www.shu.ac.uk",
     "script": {
         "name": "multiElement",
         "params": 

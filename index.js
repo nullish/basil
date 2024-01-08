@@ -21,10 +21,6 @@ const argv = yargs
         describe: 'File path to JSON list of URLs to scrape',
         type: 'string',
     })
-    .option('output', {
-        describe: 'File path to CSV of output from script',
-        type: 'string',
-    })
     .option('urlSitemap', {
         describe: 'URL of sitemap to use as input ',
         type: 'string',
@@ -34,7 +30,6 @@ const argv = yargs
 // Set properties, preferring command line params over config file where supplied.
 config.parallel = argv.parallel || config.parallel;
 config.input = argv.input || config.input;
-config.output = argv.output || config.output;
 config.urlSitemap = argv.urlSitemap || config.urlSitemap;
 
 console.log(config);
