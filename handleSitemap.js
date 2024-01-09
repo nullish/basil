@@ -2,12 +2,18 @@
  * @description Downloads a sitemap from web and converts to JSON for use by Basil script
  */
 
+
+/**** TODO
+ * @todo Try https://chat.openai.com/share/c4afe018-27d8-49b0-ba37-586a748e925f
+ * Probs needs to be single function
+ */
 const https = require("https");
 const fs = require("fs");
 const parser = require("xml2json");
 const { updateLocale } = require("yargs");
+const { resolve } = require("path");
 
-const handleSitemap = (urlSitemap) => {
+const handleSitemap = async (urlSitemap) => {
   /** @function Convert sitemap
    * @param urlSitemap
    * Downloads a sitemap from web and converts to JSON for use by Basil script
@@ -16,6 +22,10 @@ const handleSitemap = (urlSitemap) => {
     /** @function convertSitemap
      * Code to parse XML from tmp and output as
      * JSON for use as input by Basil
+     */
+
+    /***** TODO
+     * add on.finish event to fire callback
      */
     const filePath = "./input/sitemap.json";
 
@@ -41,15 +51,17 @@ const handleSitemap = (urlSitemap) => {
       });
       writer.write("]\n");
       writer.end();
-      console.log("Sitemap converted");
-      return true;
+      writer.on("finish", function () {
+        console.log("Sitemap converted");
+        return initCallBack();
+      });
     } catch (error) {
       console.log(error);
       return error;
     }
   };
 
-  const downloadSitemap = (urlSitemap, callBack) => {
+  const downloadSitemap = async (urlSitemap, callBack) => {
     /** @function downloadSitemap
      * Download sitemap XML from web to local file system
      * @param urlSitemap 
@@ -72,7 +84,7 @@ const handleSitemap = (urlSitemap) => {
     });
   };
 
-  downloadSitemap(urlSitemap, convertSitemap);
+  await downloadSitemap(urlSitemap, convertSitemap);
 };
 
 module.exports = handleSitemap;

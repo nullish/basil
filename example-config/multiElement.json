@@ -1,6 +1,5 @@
 {
     "parallel": 8,
-    "input": "./input/bus.json",
     "urlSitemap": "https://www.shu.ac.uk",
     "script": {
         "name": "multiElement",

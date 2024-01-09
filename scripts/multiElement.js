@@ -18,8 +18,9 @@ const basilMultiElement = async (args) => {
   if (inputPath) {
     arrPages = require(inputPath);
   } else {
-    handleSitemap(urlSitemap);
-    arrPages = require('../input/sitemap.json');
+    await handleSitemap(urlSitemap);
+    const sitemapFile = '../input/sitemap.json';
+    arrPages = require(sitemapFile);
   };
   const parallelBatches = Math.ceil(arrPages.length / parallel);
 

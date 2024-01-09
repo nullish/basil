@@ -11,7 +11,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "args": ["./example-config/getElement.json"],
+            "args": ["./example-config/multiElement.json"],
             "program": "${workspaceFolder}/index.js"
         }
     ]
