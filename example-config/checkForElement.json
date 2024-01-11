@@ -1,0 +1,11 @@
+{
+    "parallel": 8,
+    "urlSitemap": "https://www.shu.ac.uk/sitemap",
+    "script": {
+        "name": "checkForElement",
+        "params": 
+        [
+            {"key": "element", "value": "//li/a[contains(@class, 'pill')]"}
+        ]
+    }
+}

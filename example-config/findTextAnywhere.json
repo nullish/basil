@@ -1,0 +1,11 @@
+{
+    "parallel": 8,
+    "input": "input/testswitch.json",
+    "script": {
+        "name": "findTextAnywhere",
+        "params": 
+        [
+            {"key": "regexPattern", "value": "Centre"}
+        ]
+    }
+}

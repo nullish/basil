@@ -4,17 +4,25 @@
  * @desc Get all instances of a DOM element matched by xpath
  */
 
- const puppeteer = require('puppeteer')
- const parallel = 8;
+const puppeteer = require("puppeteer");
+const handleSitemap = require('../handleSitemap'); // processes sitemaap from web into JSON input
 
-// Input array of URLs
-const arg = process.argv[2]
-const inputPath = arg ? "../../" + arg : "/url/list.json";
+const basilMultiElement = async (args) => {
+  const {parallel, input, urlSitemap , script} = args; // Passed from index.js containing specifics for the scrape
+  let inputPath;
+  if (typeof(input) !== 'undefined') { inputPath = input.match(/\.\.\//) ? input : '../' + input };
+  const confEl = script.params.find(e => e.key == 'element').value;
 
-const arrPages = require(inputPath);
-
- const pageScrape = async (arrPages, parallel) => {
-  const parallelBatches = Math.ceil(arrPages.length / parallel)
+  // Get input of URLs from input path or sitemap URL. Input path takes precedence.
+  let arrPages;
+  if (inputPath) {
+    arrPages = require(inputPath);
+  } else {
+    await handleSitemap(urlSitemap);
+    const sitemapFile = '../input/sitemap.json';
+    arrPages = require(sitemapFile);
+  };
+  const parallelBatches = Math.ceil(arrPages.length / parallel);
 
   console.log('Scraping ' + arrPages.length + ' pages for shuspace links, in batches of ' + parallel)
 
@@ -26,7 +34,7 @@ const arrPages = require(inputPath);
   for (let i = 0; i < arrPages.length; i += parallel) {
     k++
     // Launch and Setup Chromium
-    const browser = await puppeteer.launch({ headless: "new" });
+    const browser = await puppeteer.launch();
     const context = await browser.createIncognitoBrowserContext();
     const page = await context.newPage();
     page.setJavaScriptEnabled(true)
@@ -41,7 +49,7 @@ const arrPages = require(inputPath);
         promises.push(browser.newPage().then(async page => {          
           try {
             // Set default navigation timeout.
-            page.setDefaultNavigationTimeout(30000); 
+            await page.setDefaultNavigationTimeout(30000); 
             // Goto page, wait for timeout as specified in JSON input
             await page.goto(arrPages[elem], {
               waitUntil: "networkidle2",
@@ -49,15 +57,16 @@ const arrPages = require(inputPath);
             
             let timeStamp = new Date(Date.now()).toISOString();
             // Evaluate page to get all elements matching CSS selector
-            const lnx = await page.$$eval('a[href*="hallamstudentsunion"]', as => as.map(a => [a.innerText, a.href]));
-            let arrOut = lnx.map(e => [timeStamp, arrPages[elem], e[0].trim().replace(/\n/g, " "), e[1]]);
-            let strOut = arrOut.length > 0 ?
-             arrOut.map(e => ('"' + e.join('","') + '"')) :
-             [`"${timeStamp}","${arrPages[elem]}","","","NOTHING FOUND"`];
-            // console.log(...strOut);
+            const lnx = await page.$$eval(confEl, as => as.map(a => [a.innerText, a.href]));
+            let arrOut = await lnx.map(e => [timeStamp, arrPages[elem], e[0].trim(), e[1]]);
+            let strOut = arrOut.map(e => ('"' + e.join('","') + '"'));
             strOut.forEach(e => {
               console.log(e);
             })
+            // Log if element not found
+            if (strOut.length == 0) {
+              console.log(`"${timeStamp}","${arrPages[elem]}","ELEMENT NOT FOUND",""`);
+            }
           } catch (err) {
             // Report failing element and standard error response
             let timeStamp = new Date(Date.now()).toISOString();
@@ -73,4 +82,4 @@ const arrPages = require(inputPath);
   }
 }
 
-pageScrape(arrPages, parallel)
+module.exports = basilMultiElement;

@@ -74,3 +74,4 @@ const arrPages = require(inputPath);
 }
 
 pageScrape(arrPages, parallel)
+

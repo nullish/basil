@@ -1,0 +1,13 @@
+{
+    "parallel": 8,
+    "input": "input/testswitch.json",
+    "urlSitemap": "https://www.shu.ac.uk/sitemap",
+    "script": {
+        "name": "getElement",
+        "params": 
+        [
+            {"key": "element", "value": "//li/a[contains(@class, 'pill')]"},
+            {"key": "attribute", "value": "innerHTML"}
+        ]
+    }
+}
