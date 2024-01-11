@@ -4,20 +4,30 @@
  * @desc scrapes body of JSON input URLs and reports pages which match a regex pattern.
  */
 
- const puppeteer = require('puppeteer')
- const parallel = 8;
+ const puppeteer = require('puppeteer');
+ const handleSitemap = require('../handleSitemap'); // processes sitemaap from web into JSON input
 
- const arrPages = require("../../input/file.json");
- const textForURL = 'highlight text';
- const uriForURL = encodeURIComponent(textForURL);
+ const basilFindTextAnywhere = async (args) => {
+  const {parallel, input, urlSitemap, script} = args; // Passed from index.js containing specifics for the scrape
+  let inputPath;
+  if (typeof(input) !== 'undefined') { inputPath = input.match(/\.\.\//) ? input : '../' + input };
+  const confRegex = script.params.find(e => e.key == 'regexPattern').value;
+  const rx = new RegExp(confRegex, 'gmis'); // Create regex patteern for use when matching against page HTML
 
-  const pageScrape = async (arrPages, parallel) => {
-    const parallelBatches = Math.ceil(arrPages.length / parallel)
+  // Get input of URLs from input path or sitemap URL. Input path takes precedence.
+  let arrPages;
+  if (inputPath) {
+    arrPages = require(inputPath);
+  } else {
+    handleSitemap(urlSitemap);
+    arrPages = require('../input/sitemap.json');
+  };
+  const parallelBatches = Math.ceil(arrPages.length / parallel);
 
-    console.log('Scraping ' + arrPages.length + ' pages for titles, in batches of ' + parallel)
+    console.log('Scraping ' + arrPages.length + ' pages for text pattern , in batches of ' + parallel)
 
     console.log(' This will result in ' + parallelBatches + ' batches.')
-    console.log('"timestamp","batch","index","URL","Page location","Error"')
+    console.log('"timestamp","batch","index","URL","Matches","Error"')
 
   // Split up the Array of arrPages
   let k = 0
@@ -50,14 +60,11 @@
             let timeStamp = new Date(Date.now()).toISOString();
             let bodyHTML = await page.evaluate(el => el.innerHTML, elHandle[0]);
             // c-nav negative match used to avoid nav items.
-            if (bodyHTML.match(/REGEX-PATTERN/gmis)) {
-              let locationURL = `${arrPages[elem]}#:~:text=${uriForURL}`
-              console.log(`"${timeStamp}","${k}","${j}","${arrPages[elem]}","${locationURL}",""`)
-            }
+            console.log(`"${timeStamp}","${k}","${j}","${arrPages[elem]}","${bodyHTML.match(rx) === null ? 0 : bodyHTML.match(rx).length}",""`)
           } catch (err) {
             // Report failing element and standard error response
             let timeStamp = new Date(Date.now()).toISOString();
-            console.log(`"${timeStamp}","${k}","${j}","${arrPages[elem]}","${err}"`)
+            console.log(`"${timeStamp}","${k}","${j}","${arrPages[elem]}","","${err}"`)
           }
         }))
       }
@@ -69,4 +76,4 @@
   }
 }
 
-pageScrape(arrPages, parallel)
+module.exports = basilFindTextAnywhere;
