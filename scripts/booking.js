@@ -7,7 +7,7 @@ const puppeteer = require('puppeteer')
 const screenshot = 'booking_results.png'
 try {
   (async () => {
-    const browser = await puppeteer.launch()
+    const browser = await puppeteer.launch({headless: "new"})
     const page = await browser.newPage()
     await page.goto('https://booking.com')
     await page.type('#ss', 'Berlin')

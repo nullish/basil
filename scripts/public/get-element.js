@@ -1,7 +1,7 @@
 /**
- * @name YouTube title scrape
+ * @name Get element
  *
- * @desc parallel scraping array of youtube pages to get title
+ * @desc Get specified attribute value of an element
  */
 
  const puppeteer = require('puppeteer')
@@ -16,10 +16,10 @@ const arrPages = require(inputPath);
   const pageScrape = async (arrPages, parallel) => {
     const parallelBatches = Math.ceil(arrPages.length / parallel)
 
-    console.log('Scraping ' + arrPages.length + ' pages for published date, in batches of ' + parallel)
+    console.log('Scraping ' + arrPages.length + ' pages for titles, in batches of ' + parallel)
 
     console.log(' This will result in ' + parallelBatches + ' batches.')
-    console.log('"timestamp","batch","index","URL","Date published","Error"')
+    console.log('"timestamp","batch","index","URL","Value","Error"')
 
   // Split up the Array of arrPages
   let k = 0
@@ -46,14 +46,14 @@ const arrPages = require(inputPath);
             await page.goto(arrPages[elem], {
               waitUntil: "networkidle2",
             });
-            // Element to wait for to confirm page load
-            await page.waitForXPath("//*[@id='info-strings']/yt-formatted-string");
+            
             // Get element to search for and report about
-            let elHandle = await page.$x("//*[@id='info-strings']/yt-formatted-string");
+            let elHandle = await page.$x("//div[contains(@class, 'image-row')]");
             let timeStamp = new Date(Date.now()).toISOString();
             // Get attribute value to report
             if (elHandle.length > 0) {
-              let txtOut = await page.evaluate(el => el.innerText, elHandle[0]);
+              let txtOut = await page.evaluate(el => el.innerHTML, elHandle[0]);
+              txtOut = txtOut.replace(/\n/g, "");
               console.log(`"${timeStamp}","${k}","${j}","${arrPages[elem]}","${txtOut}",""`)
             } else {
               console.log(`"${timeStamp}","${k}","${j}","${arrPages[elem]}","","ELEMENT NOT FOUND"`)
@@ -74,3 +74,4 @@ const arrPages = require(inputPath);
 }
 
 pageScrape(arrPages, parallel)
+
