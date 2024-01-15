@@ -1,0 +1,56 @@
+{
+    "configs": [
+        {
+            "configName": "Count headings",
+            "parallel": 8,
+            "urlSitemap": "https://www.example.com/sitemap",
+            "script": {
+                "name": "checkForElement",
+                "params": [
+                    {
+                        "key": "element",
+                        "value": "//li/a[contains(@class, 'pill')]"
+                    }
+                ]
+            }
+        },
+        {
+            "configName": "Search Centre",
+            "parallel": 8,
+            "input": "input/testswitch.json",
+            "script": {
+                "name": "findTextAnywhere",
+                "params": 
+                [
+                    {"key": "regexPattern", "value": "Centre"}
+                ]
+            }
+        },
+        {
+            "configName": "Get sub headings",
+            "parallel": 8,
+            "input": "input/testswitch.json",
+            "urlSitemap": "https://www.example.com/sitemap",
+            "script": {
+                "name": "getElement",
+                "params": 
+                [
+                    {"key": "element", "value": "//li/a[contains(@class, 'pill')]"},
+                    {"key": "attribute", "value": "innerHTML"}
+                ]
+            }
+        },
+        {
+            "configName": "All media URLs",
+            "parallel": 8,
+            "urlSitemap": "https://www.example.com/sitemap",
+            "script": {
+                "name": "multiElement",
+                "params": 
+                [
+                    {"key": "element", "value": "a[href*=\"https://www.example.com/-/media/home/business/\"]"}
+                ]
+            }
+        }
+    ]
+}

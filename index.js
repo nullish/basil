@@ -5,10 +5,10 @@
 
 const yargs = require('yargs');
 
-// Load config file
+// Load config
 const paramConfig = process.argv[2];
-const strConfig = paramConfig.match(/\.\//) ? paramConfig : './' + paramConfig;
-let config = require(strConfig);
+const configFile = require('./config.json');
+let config = configFile.configs.find(e => e.configName == paramConfig);
 const basilScript = require(`./scripts/${config.script.name}`);
 
 // Get overrides from command line
