@@ -1,23 +1,21 @@
 /**
  * @name Get element
- *
  * @desc Get specified attribute value of an element
  */
 
 const puppeteer = require("puppeteer");
+const csvOneDimArray = require('../csv-onedim-array'); // Loads CSV input and translates to array, element per row
 const handleSitemap = require('../handleSitemap'); // processes sitemaap from web into JSON input
 
 const basilGetElement = async (args) => {
   const {parallel, input, urlSitemap, script} = args; // Passed from index.js containing specifics for the scrape
-  let inputPath;
-  if (typeof(input) !== 'undefined') { inputPath = input.match(/\.\.\//) ? input : '../' + input };
   const confEl = script.params.find(e => e.key == 'element').value;
   const confAttr = script.params.find(e => e.key == 'attribute').value;
 
   // Get input of URLs from input path or sitemap URL. Input path takes precedence.
   let arrPages;
-  if (inputPath) {
-    arrPages = require(inputPath);
+  if (input) {
+    arrPages = csvOneDimArray(input);
   } else {
     handleSitemap(urlSitemap);
     arrPages = require('../input/sitemap.json');
