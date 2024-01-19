@@ -5,20 +5,34 @@
 
 const puppeteer = require("puppeteer");
 const csvOneDimArray = require('../csv-onedim-array'); // Loads CSV input and translates to array, element per row
-const handleSitemap = require('../handleSitemap'); // processes sitemaap from web into JSON input
+const downloadData = require('../downloadData'); // download from HTTP source
+const writeFileAsync = require('../writeFileAsync'); // write file locally
 
 const basilGetElement = async (args) => {
   const {parallel, input, urlSitemap, script} = args; // Passed from index.js containing specifics for the scrape
   const confEl = script.params.find(e => e.key == 'element').value;
   const confAttr = script.params.find(e => e.key == 'attribute').value;
+  const filePath = "./input/sitemap.json";
 
   // Get input of URLs from input path or sitemap URL. Input path takes precedence.
   let arrPages;
   if (input) {
     arrPages = csvOneDimArray(input);
   } else {
-    handleSitemap(urlSitemap);
-    arrPages = require('../input/sitemap.json');
+    try {
+      // Download data from the HTTP resource
+      const dataStream = await downloadData(urlSitemap);
+  
+      // Call the function containing fs.createWriteStream
+      await writeFileAsync(filePath, dataStream);
+  
+      // Code here will only execute after the file is written successfully
+      console.log('File has been written successfully.');
+      /** @todo Add convertToSitemap and ensure writing completes before attempting to load to array */
+      arrPages = require(`.${filePath}`);
+    } catch (error) {
+      console.error('Error:', error.message || error);
+    }
   };
   const parallelBatches = Math.ceil(arrPages.length / parallel);
 
