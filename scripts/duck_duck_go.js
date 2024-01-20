@@ -5,7 +5,7 @@
 const puppeteer = require('puppeteer');
 
 (async () => {
-  const browser = await puppeteer.launch({ headless: false });
+  const browser = await puppeteer.launch({headless: "new"})({ headless: false });
   const page = await browser.newPage()
   await page.goto('https://duckduckgo.com/', { waitUntil: 'networkidle2' })  
   await page.type('#search_form_input_homepage', 'Puppeteer')

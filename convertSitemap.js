@@ -22,6 +22,16 @@ const convertSitemap = async () => {
 	const json = JSON.parse(jsonSiteMap);
 	const urls = json.urlset.url;
 
+	// Remove existing JSON file if present
+	// delete a file asynchronously
+	fs.unlink(outputPath, (err) => {
+		if (err) {
+			console.error(err);
+		} else {
+			console.log('File is deleted.');
+		}
+	});
+
 	// Output as JSON and exit. 
 	await new Promise((resolve, reject) => {
 		outStream.write("[\n");

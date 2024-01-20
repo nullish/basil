@@ -53,7 +53,7 @@ const arrPages = require(inputPath);
   for (let i = 0; i < arrPages.length; i += parallel) {
     k++
     // Launch and Setup Chromium
-    const browser = await puppeteer.launch({ headless: "new" });
+    const browser = await puppeteer.launch({headless: "new"})({ headless: "new" });
     const context = await browser.createIncognitoBrowserContext();
     const page = await context.newPage();
     page.setJavaScriptEnabled(true)
