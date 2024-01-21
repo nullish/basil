@@ -19,24 +19,30 @@ const basilGetElement = async (args) => {
   const outPath = typeof (outputPath) == 'undefined' ? './output/webscrape.csv' : outputPath;
   const headerRow = '"timestamp","batch","index","URL","Value","Error"'; // Header row for output
 
-  // Get input of URLs from input path or sitemap URL. Input path takes precedence.
-  let arrPages;
+  /* Get input of URLs for both input path and sitemap URL, depening on what config specifies.
+  Combine them into a single input.
+  */
+  const arrPages = [];
+  // Get URLs specified by input path
   if (input) {
-    arrPages = csvOneDimArray(input);
-  } else {
+    arrPages.push(...csvOneDimArray(input));
+  }
+
+  // Get URLs specified by sitemap from web
+  if (urlSitemap) {
     try {
       // Download data from the HTTP resource
+      console.log("Downloading sitemap from web");
       const dataStream = await downloadData(urlSitemap);
-
-      console.log("Downloading sitemap from web")
       await writeFileAsync(filePath, dataStream);
       console.log('File has been written successfully.');
       await convertSitemap();
       console.log("Sitemap converted for input to web scrape.")
-      arrPages = require(jsonSitemap);
+      const objSitemap = require(jsonSitemap);
+      arrPages.push(...objSitemap);
     } catch (error) {
       console.error('Error:', error.message || error);
-    }
+    };
   };
   const parallelBatches = Math.ceil(arrPages.length / parallel);
 
