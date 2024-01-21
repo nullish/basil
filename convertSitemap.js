@@ -23,7 +23,6 @@ const convertSitemap = async () => {
 	const urls = json.urlset.url;
 
 	// Remove existing JSON file if present
-	// delete a file asynchronously
 	fs.unlink(outputPath, (err) => {
 		if (err) {
 			console.error(err);
