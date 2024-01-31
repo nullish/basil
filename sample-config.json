@@ -51,6 +51,16 @@
                     {"key": "element", "value": "a[href*=\"https://www.example.com/-/media/home/business/\"]"}
                 ]
             }
-        }
+        },
+        {
+            "configName": "quietRedirect",
+            "parallel": 8,
+            "input": "input/quiet-redirect.csv",
+            "urlSitemap": "https://www.example.com/sitemap",
+            "script": {
+              "name": "redirects",
+              "params": []
+            }
+          }
     ]
 }
