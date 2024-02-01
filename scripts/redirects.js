@@ -132,7 +132,7 @@ const basilRedirects = async (args) => {
                 ];
               }
               let strOut = arrOut.join('","');
-              fs.appendFileSync(outPath, `${strOut}\n`);
+              fs.appendFileSync(outPath, `"${strOut}"\n`);
               console.log(`"${strOut}"`);
             } catch (err) {
               // Report failing element and standard error response
