@@ -10,7 +10,7 @@
 const puppeteer = require("puppeteer");
 const fs = require('fs');
 
-const basilListCrawl = async (args) => {
+const basilListCrawler = async (args) => {
   const { startUrl, linkSelector, moreItems } = args; // Params needed for crawling list page(s)
 
   console.log(
@@ -54,13 +54,16 @@ const basilListCrawl = async (args) => {
     };
   };
 
-  console.log(arrLinks);
   await browser.close();
+  return arrLinks;
 };
 
-//module.exports = basilListCrawl;
+module.exports = basilListCrawler;
+
+/*
 basilListCrawl({
   startUrl: "https://www.shu.ac.uk/courses?page=100&perPage=5&query=&yearOfEntry=2024%2F25",
   linkSelector: "::-p-xpath(//a[@class='m-snippet__link'])",
   moreItems: "(//button[contains(@aria-label, 'Go to page') and .//span[contains(@class, 'chevron--right')]])[1]",
 });
+*/

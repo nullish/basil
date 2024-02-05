@@ -61,6 +61,20 @@
               "name": "redirects",
               "params": []
             }
-          }
+          },
+          {
+            "configName": "redirectsFromList",
+            "parallel": 8,
+            "input": "input/short.csv",
+            "listCrawl": {
+                "startUrl": "https://www.example.com/list-of-links",
+                "linkSelector": "::-p-xpath(//a[@class='m-snippet__link'])",
+                "moreItems": "(//button[contains(@aria-label, 'Go to page') and .//span[contains(@class, 'chevron--right')]])[1]"
+            },
+            "script": {
+                "name": "redirects",
+                "params": []
+            }
+        }
     ]
 }
