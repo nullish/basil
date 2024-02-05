@@ -9,9 +9,10 @@ const csvOneDimArray = require("../csv-onedim-array"); // Loads CSV input and tr
 const downloadData = require("../downloadData"); // download from HTTP source
 const writeFileAsync = require("../writeFileAsync"); // write file locally
 const convertSitemap = require("../convertSitemap"); // Converts XML sitemap for JSON input
+const listCrawler = require("./listCrawler"); // Puppeteer script to scrape links from a listing page, to be used as input
 
 const basilRedirects = async (args) => {
-  const {parallel, input, urlSitemap, outputPath} = args; // Passed from index.js containing specifics for the scrape
+  const {parallel, input, urlSitemap, listCrawl, outputPath} = args; // Passed from index.js containing specifics for the scrape
   const filePath = "./input/sitemap.xml"; // Path to store sitemap XML
   const jsonSitemap = "../input/sitemap.json"; // Path to store sitemap coverted to JSON
   const outPath =
@@ -19,7 +20,7 @@ const basilRedirects = async (args) => {
   const headerRow =
     '"timeStamp","RequestURL","ResponseURL","statusCode","statusText","lastRedirectStatusCode","lastRedirectStatusText","pageTitle","h1","Error"'; // Header row for output
 
-  /* Get input of URLs for both input path and sitemap URL, depening on what config specifies.
+  /* Get input of URLs for both input path, sitemap, and scrape of a listing page, depending on what config specifies.
   Combine them into a single input.
   */
   const arrPages = [];
@@ -44,9 +45,21 @@ const basilRedirects = async (args) => {
       console.error("Error:", error.message || error);
     }
   }
-  const parallelBatches = Math.ceil(arrPages.length / parallel);
+
+  // Get URLs from scraping a list on the target website, such as a product listing.
+  if (listCrawl) {
+    try {
+      const arrListLinks = await listCrawler(listCrawl); // Run the listCrawler module with params passed from config object
+      arrPages.push(...arrListLinks);
+    } catch (error) {
+      console.error("Error:", error.message || error);
+    };
+  }
+
+  const arrUniquePages = [...new Set(arrPages)]; // Remove duplicate from array of URLs
+  const parallelBatches = Math.ceil(arrUniquePages.length / parallel);
   console.log(
-    `Scraping ${arrPages.length} pages for redirects, in batches of ${parallel}`
+    `Scraping ${arrUniquePages.length} pages for redirects, in batches of ${parallel}`
   );
 
   // Remove existing output file if present
@@ -63,7 +76,7 @@ const basilRedirects = async (args) => {
   fs.appendFileSync(outPath, `${headerRow}\n`);
   // Split up the Array of arrPages
   let k = 0;
-  for (let i = 0; i < arrPages.length; i += parallel) {
+  for (let i = 0; i < arrUniquePages.length; i += parallel) {
     k++;
     // Launch and Setup Chromium
     const browser = await puppeteer.launch({ headless: "new" });
@@ -75,7 +88,7 @@ const basilRedirects = async (args) => {
     for (let j = 0; j < parallel; j++) {
       let elem = i + j;
       // only proceed if there is an element
-      if (arrPages[elem] != undefined) {
+      if (arrUniquePages[elem] != undefined) {
         // Promise to scrape pages
         // promises push
         promises.push(
@@ -84,7 +97,7 @@ const basilRedirects = async (args) => {
               // Set default navigation timeout.
               await page.setDefaultNavigationTimeout(30000);
               // Goto page, wait for timeout as specified in JSON input
-              let res = await page.goto(arrPages[elem], {
+              let res = await page.goto(arrUniquePages[elem], {
                 waitUntil: "networkidle2",
               });
               let stCode = res.status();
@@ -109,7 +122,7 @@ const basilRedirects = async (args) => {
                 let lastRedirectStatusText = lastRedirect._response._statusText;
                 arrOut = [
                   timeStamp,
-                  arrPages[elem],
+                  arrUniquePages[elem],
                   resUrl,
                   stCode,
                   stText,
@@ -121,7 +134,7 @@ const basilRedirects = async (args) => {
               } else {
                 arrOut = [
                   timeStamp,
-                  arrPages[elem],
+                  arrUniquePages[elem],
                   resUrl,
                   stCode,
                   stText,
@@ -137,9 +150,9 @@ const basilRedirects = async (args) => {
             } catch (err) {
               // Report failing element and standard error response
               let timeStamp = new Date(Date.now()).toISOString();
-              fs.appendFileSync(outPath, `"${timeStamp}","${arrPages[elem]}","","","","","","","",""${err}\n"`);
+              fs.appendFileSync(outPath, `"${timeStamp}","${arrUniquePages[elem]}","","","","","","","",""${err}\n"`);
               console.log(
-                `"${timeStamp}","${arrPages[elem]}","","","","","","","",""${err}"`
+                `"${timeStamp}","${arrUniquePages[elem]}","","","","","","","",""${err}"`
               );
             }
           })

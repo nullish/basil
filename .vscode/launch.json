@@ -33,5 +33,14 @@
             "args": ["quietRedirect"],
             "program": "${workspaceFolder}/index.js"
         },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Test List Crawl",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "${workspaceFolder}/scripts/listCrawl.js"
+        },
     ]
 }
