@@ -5,71 +5,19 @@
  */
 const puppeteer = require("puppeteer");
 const fs = require("fs");
-const csvOneDimArray = require("../csv-onedim-array"); // Loads CSV input and translates to array, element per row
-const downloadData = require("../downloadData"); // download from HTTP source
-const writeFileAsync = require("../writeFileAsync"); // write file locally
-const convertSitemap = require("../convertSitemap"); // Converts XML sitemap for JSON input
-const listCrawler = require("./listCrawler"); // Puppeteer script to scrape links from a listing page, to be used as input
 
 const basilRedirects = async (args) => {
-  const {parallel, input, urlSitemap, listCrawl, outputPath} = args; // Passed from index.js containing specifics for the scrape
-  const filePath = "./input/sitemap.xml"; // Path to store sitemap XML
-  const jsonSitemap = "../input/sitemap.json"; // Path to store sitemap coverted to JSON
+  const {parallel, outputPath, arrUniquePages} = args; // Passed from index.js containing specifics for the scrape
   const outPath =
     typeof outputPath == "undefined" ? "./output/webscrape.csv" : outputPath;
   const headerRow =
     '"timeStamp","RequestURL","ResponseURL","statusCode","statusText","lastRedirectStatusCode","lastRedirectStatusText","pageTitle","h1","Error"'; // Header row for output
 
-  /* Get input of URLs for both input path, sitemap, and scrape of a listing page, depending on what config specifies.
-  Combine them into a single input.
-  */
-  const arrPages = [];
-  // Get URLs specified by input path
-  if (input) {
-    arrPages.push(...csvOneDimArray(input));
-  }
-
-  // Get URLs specified by sitemap from web
-  if (urlSitemap) {
-    try {
-      // Download data from the HTTP resource
-      console.log("Downloading sitemap from web");
-      const dataStream = await downloadData(urlSitemap);
-      await writeFileAsync(filePath, dataStream);
-      console.log("File has been written successfully.");
-      await convertSitemap();
-      console.log("Sitemap converted for input to web scrape.");
-      const objSitemap = require(jsonSitemap);
-      arrPages.push(...objSitemap);
-    } catch (error) {
-      console.error("Error:", error.message || error);
-    }
-  }
-
-  // Get URLs from scraping a list on the target website, such as a product listing.
-  if (listCrawl) {
-    try {
-      const arrListLinks = await listCrawler(listCrawl); // Run the listCrawler module with params passed from config object
-      arrPages.push(...arrListLinks);
-    } catch (error) {
-      console.error("Error:", error.message || error);
-    };
-  }
-
-  const arrUniquePages = [...new Set(arrPages)]; // Remove duplicate from array of URLs
   const parallelBatches = Math.ceil(arrUniquePages.length / parallel);
   console.log(
     `Scraping ${arrUniquePages.length} pages for redirects, in batches of ${parallel}`
   );
 
-  // Remove existing output file if present
-  fs.unlink(outPath, (err) => {
-    if (err) {
-      console.error(err);
-    } else {
-      console.log("Existing output deleted.");
-    }
-  });
   console.log(" This will result in " + parallelBatches + " batches.");
   console.log(headerRow);
 

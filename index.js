@@ -4,7 +4,14 @@
  */
 
 const yargs = require('yargs');
+const fs = require('fs');
+const csvOneDimArray = require("./csv-onedim-array"); // Loads CSV input and translates to array, element per row
+const downloadData = require("./downloadData"); // download from HTTP source
+const writeFileAsync = require("./writeFileAsync"); // write file locally
+const convertSitemap = require("./convertSitemap"); // Converts XML sitemap for JSON input
+const listCrawler = require("./scripts/listCrawler"); // Puppeteer script to scrape links from a listing page, to be used as input
 
+const main = async () => {
 // Load config
 const paramConfig = process.argv[2];
 const configFile = require('./config.json');
@@ -31,7 +38,66 @@ const argv = yargs
 config.parallel = argv.parallel || config.parallel;
 config.input = argv.input || config.input;
 config.urlSitemap = argv.urlSitemap || config.urlSitemap;
-
 console.log(config);
 
-return basilScript(config);
+/* Set up input source for running scripts. 
+Pass an array of URLs to the scrpt module.
+*/
+
+const filePath = "./input/sitemap.xml"; // Path to store sitemap XML
+const jsonSitemap = "../input/sitemap.json"; // Path to store sitemap coverted to JSON
+const outPath = typeof config.outputPath == "undefined" ? "./output/webscrape.csv" : config.outputPath;
+
+/* Get input of URLs for both input path, sitemap, and scrape of a listing page, depending on what config specifies.
+  Combine them into a single input.
+  */
+  const arrPages = [];
+  const {input, urlSitemap, listCrawl} = config;
+  // Get URLs specified by input path
+  if (input) {
+    arrPages.push(...csvOneDimArray(input));
+  }
+
+  // Get URLs specified by sitemap from web
+  if (urlSitemap) {
+    try {
+      // Download data from the HTTP resource
+      console.log("Downloading sitemap from web");
+      const dataStream = await downloadData(urlSitemap);
+      await writeFileAsync(filePath, dataStream);
+      console.log("File has been written successfully.");
+      await convertSitemap();
+      console.log("Sitemap converted for input to web scrape.");
+      const objSitemap = require(jsonSitemap);
+      arrPages.push(...objSitemap);
+    } catch (error) {
+      console.error("Error:", error.message || error);
+    }
+  }
+
+  // Get URLs from scraping a list on the target website, such as a product listing.
+  if (listCrawl) {
+    try {
+      const arrListLinks = await listCrawler(listCrawl); // Run the listCrawler module with params passed from config object
+      arrPages.push(...arrListLinks);
+    } catch (error) {
+      console.error("Error:", error.message || error);
+    };
+  }
+
+  const arrUniquePages = [...new Set(arrPages)]; // Remove duplicate from array of URLs
+  config.arrUniquePages = arrUniquePages;
+
+  // Remove existing output file if present
+  fs.unlink(outPath, (err) => {
+    if (err) {
+      console.error(err);
+    } else {
+      console.log("Existing output deleted.");
+    }
+  });
+  
+  return basilScript(config);
+};
+
+main();
