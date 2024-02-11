@@ -5,32 +5,24 @@
  */
 
 const puppeteer = require("puppeteer");
-const csvOneDimArray = require('../csv-onedim-array'); // Loads CSV input and translates to array, element per row
-const handleSitemap = require('../handleSitemap'); // processes sitemaap from web into JSON input
+const fs = require('fs');
 
 const basilMultiElement = async (args) => {
-  const {parallel, input, urlSitemap , script} = args; // Passed from index.js containing specifics for the scrape
+  const {parallel, outputPath, arrUniquePages, script} = args; // Passed from index.js containing specifics for the scrape
   const confEl = script.params.find(e => e.key == 'element').value;
+  const outPath = typeof (outputPath) == 'undefined' ? './output/webscrape.csv' : outputPath;
+  const headerRow = '"timestamp","URL","linkText","linkTarget","Error"';
+  const parallelBatches = Math.ceil(arrUniquePages.length / parallel);
 
-  // Get input of URLs from input path or sitemap URL. Input path takes precedence.
-  let arrPages;
-  if (input) {
-    arrPages = csvOneDimArray(input);
-  } else {
-    await handleSitemap(urlSitemap);
-    const sitemapFile = '../input/sitemap.json';
-    arrPages = require(sitemapFile);
-  };
-  const parallelBatches = Math.ceil(arrPages.length / parallel);
-
-  console.log('Scraping ' + arrPages.length + ' pages for shuspace links, in batches of ' + parallel)
+  console.log('Scraping ' + arrUniquePages.length + ' pages for shuspace links, in batches of ' + parallel)
 
   console.log(' This will result in ' + parallelBatches + ' batches.')
-  console.log('"timestamp","URL","linkText","linkTarget","Error"')
+  console.log(headerRow);
+  fs.appendFileSync(outPath, `${headerRow}\n`);
 
-  // Split up the Array of arrPages
+  // Split up the Array of arrUniquePages
   let k = 0
-  for (let i = 0; i < arrPages.length; i += parallel) {
+  for (let i = 0; i < arrUniquePages.length; i += parallel) {
     k++
     // Launch and Setup Chromium
     const browser = await puppeteer.launch({headless: "new"});
@@ -42,7 +34,7 @@ const basilMultiElement = async (args) => {
     for (let j = 0; j < parallel; j++) {
       let elem = i + j
       // only proceed if there is an element 
-      if (arrPages[elem] != undefined) {
+      if (arrUniquePages[elem] != undefined) {
         // Promise to scrape pages
         // promises push
         promises.push(browser.newPage().then(async page => {          
@@ -50,26 +42,29 @@ const basilMultiElement = async (args) => {
             // Set default navigation timeout.
             await page.setDefaultNavigationTimeout(30000); 
             // Goto page, wait for timeout as specified in JSON input
-            await page.goto(arrPages[elem], {
+            await page.goto(arrUniquePages[elem], {
               waitUntil: "networkidle2",
             });
             
             let timeStamp = new Date(Date.now()).toISOString();
             // Evaluate page to get all elements matching CSS selector
             const lnx = await page.$$eval(confEl, as => as.map(a => [a.innerText, a.href]));
-            let arrOut = await lnx.map(e => [timeStamp, arrPages[elem], e[0].trim(), e[1]]);
+            let arrOut = await lnx.map(e => [timeStamp, arrUniquePages[elem], e[0].trim(), e[1]]);
             let strOut = arrOut.map(e => ('"' + e.join('","') + '"'));
             strOut.forEach(e => {
               console.log(e);
+              fs.appendFileSync(`${e}\n`);
             })
             // Log if element not found
             if (strOut.length == 0) {
-              console.log(`"${timeStamp}","${arrPages[elem]}","ELEMENT NOT FOUND",""`);
+              console.log(`"${timeStamp}","${arrUniquePages[elem]}","ELEMENT NOT FOUND",""`);
+              fs.appendFileSync(outPath, `"${timeStamp}","${arrUniquePages[elem]}","ELEMENT NOT FOUND",""\n`);
             }
           } catch (err) {
             // Report failing element and standard error response
             let timeStamp = new Date(Date.now()).toISOString();
-            console.log(`"${timeStamp}","${arrPages[elem]}","","${err}"`)
+            console.log(`"${timeStamp}","${arrUniquePages[elem]}","","${err}"`);
+            fs.appendFileSync(outPath, `"${timeStamp}","${arrUniquePages[elem]}","","${err}"\n`);
           }
         }))
       }
