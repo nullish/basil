@@ -5,32 +5,24 @@
  */
 
  const puppeteer = require('puppeteer');
- const csvOneDimArray = require('../csv-onedim-array'); // Loads CSV input and translates to array, element per row
- const handleSitemap = require('../handleSitemap'); // processes sitemaap from web into JSON input
+ const fs = require('fs');
 
  const basilFindTextAnywhere = async (args) => {
-  const {parallel, input, urlSitemap, script} = args; // Passed from index.js containing specifics for the scrape
+  const {parallel, outputPath, arrUniquePages, script} = args; // Passed from index.js containing specifics for the scrape
   const confRegex = script.params.find(e => e.key == 'regexPattern').value;
   const rx = new RegExp(confRegex, 'gmis'); // Create regex patteern for use when matching against page HTML
+  const outPath = typeof outputPath == "undefined" ? "./output/webscrape.csv" : outputPath;
+  const parallelBatches = Math.ceil(arrUniquePages.length / parallel);
 
-  // Get input of URLs from input path or sitemap URL. Input path takes precedence.
-  let arrPages;
-  if (input) {
-    arrPages = csvOneDimArray(input);
-  } else {
-    handleSitemap(urlSitemap);
-    arrPages = require('../input/sitemap.json');
-  };
-  const parallelBatches = Math.ceil(arrPages.length / parallel);
-
-    console.log('Scraping ' + arrPages.length + ' pages for text pattern , in batches of ' + parallel)
+    console.log('Scraping ' + arrUniquePages.length + ' pages for text pattern , in batches of ' + parallel)
 
     console.log(' This will result in ' + parallelBatches + ' batches.')
     console.log('"timestamp","batch","index","URL","Matches","Error"')
+    fs.appendFileSync(outPath, '"timestamp","batch","index","URL","Matches","Error"');
 
-  // Split up the Array of arrPages
+  // Split up the Array of arrUniquePages
   let k = 0
-  for (let i = 0; i < arrPages.length; i += parallel) {
+  for (let i = 0; i < arrUniquePages.length; i += parallel) {
     k++
     // Launch and Setup Chromium
     const browser = await puppeteer.launch({headless: "new"});
@@ -42,7 +34,7 @@
     for (let j = 0; j < parallel; j++) {
       let elem = i + j
       // only proceed if there is an element 
-      if (arrPages[elem] != undefined) {
+      if (arrUniquePages[elem] != undefined) {
         // Promise to scrape pages
         // promises push
         promises.push(browser.newPage().then(async page => {          
@@ -50,7 +42,7 @@
             // Set default navigation timeout.
             await page.setDefaultNavigationTimeout(30000); 
             // Goto page, wait for timeout as specified in JSON input
-            await page.goto(arrPages[elem], {
+            await page.goto(arrUniquePages[elem], {
               waitUntil: "networkidle2",
             });
             
@@ -59,11 +51,13 @@
             let timeStamp = new Date(Date.now()).toISOString();
             let bodyHTML = await page.evaluate(el => el.innerHTML, elHandle[0]);
             // c-nav negative match used to avoid nav items.
-            console.log(`"${timeStamp}","${k}","${j}","${arrPages[elem]}","${bodyHTML.match(rx) === null ? 0 : bodyHTML.match(rx).length}",""`)
+            console.log(`"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","${bodyHTML.match(rx) === null ? 0 : bodyHTML.match(rx).length}",""`)
+            fs.appendFileSync(outPath, `"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","${bodyHTML.match(rx) === null ? 0 : bodyHTML.match(rx).length}",""\n`)
           } catch (err) {
             // Report failing element and standard error response
             let timeStamp = new Date(Date.now()).toISOString();
-            console.log(`"${timeStamp}","${k}","${j}","${arrPages[elem]}","","${err}"`)
+            console.log(`"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","","${err}"`)
+            fs.appendFileSync(outPath, `"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","","${err}\n"`)
           }
         }))
       }
