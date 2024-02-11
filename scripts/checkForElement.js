@@ -5,31 +5,23 @@
  */
 
 const puppeteer = require('puppeteer');
-const csvOneDimArray = require('../csv-onedim-array'); // Loads CSV input and translates to array, element per row
-const handleSitemap = require('../handleSitemap'); // processes sitemaap from web into JSON input
+const fs = require("fs");
 
 const basilCheckForElement = async (args) => {
-  const {parallel, input, urlSitemap, script} = args; // Passed from index.js containing specifics for the scrape
+  const {parallel, outputPath, arrUniquePages, script} = args; // Passed from index.js containing specifics for the scrape
   const confEl = script.params.find(e => e.key == 'element').value;
-
-  // Get input of URLs from input path or sitemap URL. Input path takes precedence.
-  let arrPages;
-  if (input) {
-    arrPages = csvOneDimArray(input);
-  } else {
-    console.log(handleSitemap(urlSitemap));
-    arrPages = require('../input/sitemap.json');
-  };
-  const parallelBatches = Math.ceil(arrPages.length / parallel);
-
-  console.log('Scraping ' + arrPages.length + ' pages in batches of ' + parallel)
+  const parallelBatches = Math.ceil(arrUniquePages.length / parallel);
+  const outPath = typeof outputPath == "undefined" ? "./output/webscrape.csv" : outputPath;
+  console.log('Scraping ' + arrUniquePages.length + ' pages in batches of ' + parallel)
 
   console.log(' This will result in ' + parallelBatches + ' batches.')
-  console.log('"timestamp","batch","index","URL","Present","Error"')
+  const headerRow = '"timestamp","batch","index","URL","Present","Error"';
+  console.log(headerRow);
 
-  // Split up the Array of arrPages
+  fs.appendFileSync(outPath, `${headerRow}\n`);
+  // Split up the Array of arrUniquePages
   let k = 0
-  for (let i = 0; i < arrPages.length; i += parallel) {
+  for (let i = 0; i < arrUniquePages.length; i += parallel) {
     k++
     // Launch and Setup Chromium
     const browser = await puppeteer.launch({headless: "new"});
@@ -41,7 +33,7 @@ const basilCheckForElement = async (args) => {
     for (let j = 0; j < parallel; j++) {
       let elem = i + j
       // only proceed if there is an element 
-      if (arrPages[elem] != undefined) {
+      if (arrUniquePages[elem] != undefined) {
         // Promise to scrape pages
         // promises push
         promises.push(browser.newPage().then(async page => {
@@ -49,7 +41,7 @@ const basilCheckForElement = async (args) => {
             // Set default navigation timeout.
             await page.setDefaultNavigationTimeout(30000);
             // Goto page, wait for timeout as specified in JSON input
-            await page.goto(arrPages[elem], {
+            await page.goto(arrUniquePages[elem], {
               waitUntil: "networkidle2",
             });
 
@@ -58,14 +50,17 @@ const basilCheckForElement = async (args) => {
             let timeStamp = new Date(Date.now()).toISOString();
             // Get attribute value to report
             if (elHandle.length > 0) {
-              console.log(`"${timeStamp}","${k}","${j}","${arrPages[elem]}","true",""`)
+              console.log(`"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","true",""`)
+              fs.appendFileSync(outPath, `"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","true",""\n`);
             } else {
-              console.log(`"${timeStamp}","${k}","${j}","${arrPages[elem]}","false",""`)
+              console.log(`"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","false",""`)
+              fs.appendFileSync(outPath, `"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","false",""\n`)
             }
           } catch (err) {
             // Report failing element and standard error response
             let timeStamp = new Date(Date.now()).toISOString();
-            console.log(`"${timeStamp}","${k}","${j}","${arrPages[elem]}","","${err}"`)
+            console.log(`"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","","${err}"`)
+            fs.appendFileSync(outPath, `"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","","${err}"\n`)
           }
         }))
       }
