@@ -75,6 +75,24 @@
                 "name": "redirects",
                 "params": []
             }
-        }
+        },
+        {
+            "configName": "linkArray",
+            "parallel": 8,
+            "input": "input/bus-washup.csv",
+            "script": {
+              "name": "matchLinkArray",
+              "params": [
+                {
+                  "key": "links",
+                  "value": [
+                    "https://www.shu.ac.uk/about-this-website",
+                    "https://www.shu.ac.uk/study-here/apply",
+                    "https://www.shu.ac.uk/about-us/who-we-are",
+                    "https://www.shu.ac.uk/about-us/our-values/sustainability"
+                ]}
+              ]
+            }
+          }
     ]
 }

@@ -36,6 +36,16 @@
         {
             "type": "node",
             "request": "launch",
+            "name": "Match link array",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "args": ["linkArray"],
+            "program": "${workspaceFolder}/index.js"
+        },
+        {
+            "type": "node",
+            "request": "launch",
             "name": "Test List Crawl",
             "skipFiles": [
                 "<node_internals>/**"
