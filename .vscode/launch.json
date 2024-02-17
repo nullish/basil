@@ -52,5 +52,14 @@
             ],
             "program": "${workspaceFolder}/scripts/listCrawl.js"
         },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Test Scroll Crawl",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "${workspaceFolder}/scripts/scrollCrawler.js"
+        }
     ]
 }
