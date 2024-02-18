@@ -9,7 +9,8 @@ const csvOneDimArray = require("./csv-onedim-array"); // Loads CSV input and tra
 const downloadData = require("./downloadData"); // download from HTTP source
 const writeFileAsync = require("./writeFileAsync"); // write file locally
 const convertSitemap = require("./convertSitemap"); // Converts XML sitemap for JSON input
-const listCrawler = require("./scripts/listCrawler"); // Puppeteer script to scrape links from a listing page, to be used as input
+const listCrawler = require("./scripts/listCrawler"); // Puppeteer script to scrape links from a paginated listing page, to be used as input
+const scrollCrawler = require("./scripts/scrollCrawler"); // Puppeteer script to scrape links from a lazy loading listing page, to be used as input
 
 const main = async () => {
 // Load config
@@ -52,7 +53,8 @@ const outPath = typeof config.outputPath == "undefined" ? "./output/webscrape.cs
   Combine them into a single input.
   */
   const arrPages = [];
-  const {input, urlSitemap, listCrawl} = config;
+  const {input, urlSitemap, pageList, scrollList} = config;
+
   // Get URLs specified by input path
   if (input) {
     arrPages.push(...csvOneDimArray(input));
@@ -75,15 +77,31 @@ const outPath = typeof config.outputPath == "undefined" ? "./output/webscrape.cs
     }
   }
 
-  // Get URLs from scraping a list on the target website, such as a product listing.
-  if (listCrawl) {
+  /* Get URLs from scraping a list on the target website, such as a product listing.
+  List type: paginate
+  */
+
+  if (pageList) {
     try {
-      const arrListLinks = await listCrawler(listCrawl); // Run the listCrawler module with params passed from config object
+      const arrListLinks = await listCrawler(pageList); // Run the listCrawler module with params passed from config object
       arrPages.push(...arrListLinks);
     } catch (error) {
       console.error("Error:", error.message || error);
     };
-  }
+  };
+
+   /* Get URLs from scraping a list on the target website, such as a product listing.
+  List type: lazy loading scroll
+  */
+
+  if (scrollList) {
+    try {
+      const arrListLinks = await scrollCrawler(scrollList); // Run the listCrawler module with params passed from config object
+      arrPages.push(...arrListLinks);
+    } catch (error) {
+      console.error("Error:", error.message || error);
+    };
+  };
 
   const arrUniquePages = [...new Set(arrPages)]; // Remove duplicate from array of URLs
   config.arrUniquePages = arrUniquePages;
