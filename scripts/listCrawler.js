@@ -3,12 +3,7 @@
  * @desc Crawl a list of items such as a search results or product listing and return list of URLs for use in a subsequent web scrape
  */
 
-
-/** @todo Return an array of URLs when completed
- * Integrate into other scraping scripts as supplier of input
- */
 const puppeteer = require("puppeteer");
-const fs = require('fs');
 
 const basilListCrawler = async (args) => {
   const { startUrl, linkSelector, moreItems } = args; // Params needed for crawling list page(s)
