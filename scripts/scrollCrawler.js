@@ -53,15 +53,16 @@ const basilScrollCrawler = async (args) => {
     // Collect link locations once page has been scrolled to its limit
     const pageLinks = await page.$$eval(linkSelector, as => as.map(a => a.href));
     arrLinks.push(...pageLinks);
-    console.log(arrLinks);
-
     await browser.close();
+    return arrLinks;
 };
 
-// module.exports = basilScrollCrawler;
+module.exports = basilScrollCrawler;
 
+/*
 basilScrollCrawler({
     startUrl: "https://blog.justinmallone.com/tag/microblog/",
     maxScrolls: 10,
     linkSelector: "a.post-card-content-link",
 });
+*/
