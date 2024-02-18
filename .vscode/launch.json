@@ -60,6 +60,16 @@
                 "<node_internals>/**"
             ],
             "program": "${workspaceFolder}/scripts/scrollCrawler.js"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Scroll crawl",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "args": ["eg-lazyload"],
+            "program": "${workspaceFolder}/index.js"
         }
     ]
 }
