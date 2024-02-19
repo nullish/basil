@@ -85,7 +85,7 @@ This will instruct Basil to select the configuration with that name from `./conf
 
 ### Example configurations
 
-These examples are taken from `./sample-config.json`
+These examples are taken from [`./sample-config.json`](./sample-config.json)
 
 #### Count headings
 
