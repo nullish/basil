@@ -70,6 +70,16 @@
             ],
             "args": ["eg-lazyload"],
             "program": "${workspaceFolder}/index.js"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "multiElement",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "args": ["footer-links"],
+            "program": "${workspaceFolder}/index.js"
         }
     ]
 }
