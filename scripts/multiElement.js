@@ -53,7 +53,7 @@ const basilMultiElement = async (args) => {
             let strOut = arrOut.map(e => ('"' + e.join('","') + '"'));
             strOut.forEach(e => {
               console.log(e);
-              fs.appendFileSync(`${e}\n`);
+              fs.appendFileSync(outPath, `${e}\n`);
             })
             // Log if element not found
             if (strOut.length == 0) {
