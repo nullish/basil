@@ -83,6 +83,20 @@ npm run basil <configName>
 
 This will instruct Basil to select the configuration with that name from `./config.json` and run a web scrape using all the input sources the configuration specifies. The output will be logged to STDOUT and , by default, `output/webscrape.csv`.
 
+### Available scripts
+
+All scripts are located in `scripts/`
+
+| Name | Purpose |
+|------|---------|
+| checkForElement | Count instances of an element per page |
+| cookiesAll | List all cookies downloaded by page |
+| findTextAnywhere | Report instances of text anywhere in page |
+| getElement | Report attribute of a chosen element by page |
+| gtmDataLayer | Report instances of a Google Tag Manager data layer attribute by page |
+| matchLinkArray | Report instances of links that match an array of links, by page |
+| multiElement | Report an attribute for all instances of an element by page |
+
 ### Example configurations
 
 These examples are taken from [`./sample-config.json`](./sample-config.json)
@@ -108,3 +122,43 @@ These examples are taken from [`./sample-config.json`](./sample-config.json)
 ```
 
 **Description:** Combine the URLs from a file called `input/sitemap.csv` and a sitemap at `https://www.shu.ac.uk/sitemap` and report the number of instances of `//li/a[contains(@class, 'pill')]` per page in `output/webscrape.csv`.
+
+#### All media URLs
+
+```json
+{
+    "configName": "All media URLs",
+    "parallel": 8,
+    "urlSitemap": "https://www.example.com/sitemap",
+    "script": {
+        "name": "multiElement",
+        "params": 
+        [
+            {"key": "element", "value": "a[href*=\"https://www.example.com/-/media/home/business/\"]"}
+        ]
+    }
+}
+```
+
+**Description:**
+
+#### Redirects from list
+
+```json
+{
+    "configName": "redirectsFromList",
+    "parallel": 8,
+    "input": "input/short.csv",
+    "listCrawl": {
+        "startUrl": "https://www.example.com/list-of-links",
+        "linkSelector": "::-p-xpath(//a[@class='m-snippet__link'])",
+        "moreItems": "(//button[contains(@aria-label, 'Go to page') and .//span[contains(@class, 'chevron--right')]])[1]"
+    },
+    "script": {
+        "name": "redirects",
+        "params": []
+    }
+}
+```
+
+**Description:**
