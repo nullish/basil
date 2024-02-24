@@ -63,12 +63,12 @@ This comprises:
 | Attribute name | Description                                                 | Optional / mandatory |
 |----------------|-------------------------------------------------------------|----------------------|
 | configName     | **String:** name for the config used to select the config to run  | M                    |
-| parallel       | **Integer:** the number of Chrome instances to launch at once. The recommendation is one. | M |
+| parallel       | **Integer:** the number of Chrome instances to launch at once. An upper limit of 8 is recommended. | M |
 | output         | **String:** file path to save results. Default is `output/webscrape.csv` | O |
 | input          | **String:** file path of a single column CSV of URLs to scrape | O |
 | urlSitemap     | **String:** URL for a sitemap to use for a list of URLs to scrape | O |
-| pageList       | **Object:** details of a page with links to acquire for scraping. _startUrl_: page to begin. _linkSelector_: DOM elements containing link value to scrape. _moreItems_: element to click to move to next page | O |
-| scrollList     | **Object:** details of page that uses lazy load scrolling, with links to acquire for scraping.  _startUrl_: page to begin. _linkSelector_: DOM elements containing link value to scrape. _maxScrolls:_ maximum attempts at scrolling for more items. | O |
+| pageList       | **Object:** details of a page with links to acquire for scraping. <br><br>_startUrl_: page to begin. <br><br>_linkSelector_: DOM elements containing link value to scrape. <br><br>_moreItems_: element to click to move to next page | O |
+| scrollList     | **Object:** details of page that uses lazy load scrolling, with links to acquire for scraping.  <br><br>_startUrl_: page to begin. <br><br>_linkSelector_: DOM elements containing link value to scrape. <br><br>_maxScrolls:_ maximum attempts at scrolling for more items. | O |
 | script         | **Object:** name of the script to run and parmaters specific to the scrpt. | M |
 
 Only one of _input_, _urlSitemap_, _pageList_, or _scrollList_ needs to be present, but all can be included, and the resulting list of unique URLs will be scraped.
@@ -106,3 +106,5 @@ These examples are taken from [`./sample-config.json`](./sample-config.json)
     }
 }
 ```
+
+**Description:** Combine the URLs from a file called `input/sitemap.csv` and a sitemap at `https://www.shu.ac.uk/sitemap` and report the number of instances of `//li/a[contains(@class, 'pill')]` per page in `output/webscrape.csv`.
