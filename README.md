@@ -24,7 +24,7 @@ Basil runs Puppeteer scripts to scrape web data from a configuration file. The c
 * which script to run
 * what elements specific to that script it should look for
 
-The configuration file comprises an array of JavaScript objects, each one is a configuration which can be selected to run with given parameter. 
+The configuration file comprises an array of JavaScript objects, each one is a configuration which can be selected to run with a given parameter. 
 
 It is stored in: `./config.json`
 
@@ -81,7 +81,7 @@ Execute:
 npm run basil <configName>
 ```
 
-This will instruct Basil to select the configuration with that name from `./config.json` and run a web scrape using all the input sources the configuration specifies. The output will be logged to STDOUT and , by default, `output/webscrape.csv`.
+This will instruct Basil to select the configuration with that name from `./config.json` and run a web scrape using all the input sources the configuration specifies. The output will be logged to STDOUT and, by default, `output/webscrape.csv`.
 
 ### Available scripts
 
@@ -138,7 +138,7 @@ These examples are taken from [`./sample-config.json`](./sample-config.json)
 }
 ```
 
-**Description:** Combine the URLs from a file called `input/sitemap.csv` and a sitemap at `https://www.example.com/sitemap` and report the number of instances of `//li/a[contains(@class, 'pill')]` per page in `output/webscrape.csv`.
+**Description:** Combine the URLs from a file called `input/sitemap.csv` and a sitemap at `https://www.example.com/sitemap` and report the number of instances of `//li/a[contains(@class, 'pill')]` per page.
 
 #### All media URLs
 
@@ -178,7 +178,7 @@ These examples are taken from [`./sample-config.json`](./sample-config.json)
 }
 ```
 
-**Description:** Using a a list of URLs which combines an input file with the path `input/short.csv` and all the links at `https://www.example.com/list-of-links` with element selector `::-p-xpath(//a[@class='m-snippet__link'])`, report the last rediect and HTTP status code. Paginate through additional pages of URLs while ever the 'more items' selector `(//button[contains(@aria-label, 'Go to page') and .//span[contains(@class, 'chevron--right')]])[1]` is found.
+**Description:** Using a a list of URLs which combines an input file with the path `input/short.csv` and all the links at `https://www.example.com/list-of-links` with element selector `::-p-xpath(//a[@class='m-snippet__link'])`, report the last rediect and HTTP status code of each URL. Paginate through additional pages of URLs while ever the 'more items' selector `(//button[contains(@aria-label, 'Go to page') and .//span[contains(@class, 'chevron--right')]])[1]` is found.
 
 #### Match array of links
 
@@ -228,4 +228,4 @@ These examples are taken from [`./sample-config.json`](./sample-config.json)
 }
 ```
 
-**Description:** Using a list of URLs extracted from the URL `https://blog.justinmallone.com/tag/microblog/` matching element selector `a.post-card-content-link`, report the `h1` inner text value for rach URL. Scroll down the list of links for a maximum of 10 scroll actions.
+**Description:** Using a list of URLs extracted from the URL `https://blog.justinmallone.com/tag/microblog/` matching element selector `a.post-card-content-link`, report the `h1` inner text value for each URL. Scroll down the list of links for a maximum of 10 scroll actions.
