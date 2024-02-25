@@ -1,8 +1,9 @@
 {
     "configs": [
         {
-            "configName": "Count headings",
+            "configName": "count-headings",
             "parallel": 8,
+            "input": "input/sitemap.csv",
             "urlSitemap": "https://www.example.com/sitemap",
             "script": {
                 "name": "checkForElement",
@@ -11,32 +12,6 @@
                         "key": "element",
                         "value": "//li/a[contains(@class, 'pill')]"
                     }
-                ]
-            }
-        },
-        {
-            "configName": "Search Centre",
-            "parallel": 8,
-            "input": "input/testswitch.json",
-            "script": {
-                "name": "findTextAnywhere",
-                "params": 
-                [
-                    {"key": "regexPattern", "value": "Centre"}
-                ]
-            }
-        },
-        {
-            "configName": "Get sub headings",
-            "parallel": 8,
-            "input": "input/testswitch.json",
-            "urlSitemap": "https://www.example.com/sitemap",
-            "script": {
-                "name": "getElement",
-                "params": 
-                [
-                    {"key": "element", "value": "//li/a[contains(@class, 'pill')]"},
-                    {"key": "attribute", "value": "innerHTML"}
                 ]
             }
         },
@@ -86,13 +61,31 @@
                 {
                   "key": "links",
                   "value": [
-                    "https://www.shu.ac.uk/about-this-website",
-                    "https://www.shu.ac.uk/study-here/apply",
-                    "https://www.shu.ac.uk/about-us/who-we-are",
-                    "https://www.shu.ac.uk/about-us/our-values/sustainability"
+                    "https://www.example.com/about-this-website",
+                    "https://www.example.com/study-here/apply",
+                    "https://www.example.com/about-us/who-we-are",
+                    "https://www.example.com/about-us/our-values/sustainability"
                 ]}
               ]
             }
-          }
+          },
+          {
+            "configName": "eg-lazyload",
+            "parallel": 8,
+            "input": "",
+            "scrollList": {
+                "startUrl": "https://blog.justinmallone.com/tag/microblog/",
+                "linkSelector": "a.post-card-content-link",
+                "maxScrolls": 10
+            },
+            "script": {
+                "name": "getElement",
+                "params": 
+                [
+                    {"key": "element", "value": "//h1"},
+                    {"key": "attribute", "value": "innerText"}
+                ]
+            }
+        }
     ]
 }
