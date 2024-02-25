@@ -98,6 +98,22 @@ All scripts are located in `scripts/`
 | multiElement | Report an attribute for all instances of an element by page |
 | redirects | Record last redirect and status code for supplied list of URLs |
 
+### Script parameters
+
+| Script name | Parameter name | Type | Description | Optional / Mandatory |
+| ------------|----------------|------|-------------|--------|
+| checkForElement | element | string | Element selector to check for | M |
+| cookiesAll | N/A | N/A | N/A | N/A |
+| findTextAnywhere | regexPattern | string | Regular expression to match page content | M |
+| getElement | element | string | Element selector to check for | M |
+| | attribute | string | Attribute value to report | O |
+| gtmDataLayer | containerID | string | Google Tag Manager container ID | M |
+| | gtmAttributeName | string | value to retrieve from GTM data layer | M |
+| matchLinkArray | links | array | Array of links to match | M |
+| multiElement | element | string | Element selector to check for | M |
+| | attribute | string | Attribute value to report | O |
+| redirects | N/A | N/A | N/A | N/A |
+
 ### Example configurations
 
 These examples are taken from [`./sample-config.json`](./sample-config.json)
