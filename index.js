@@ -46,7 +46,7 @@ Pass an array of URLs to the scrpt module.
 */
 
 const filePath = "./input/sitemap.xml"; // Path to store sitemap XML
-const jsonSitemap = "../input/sitemap.json"; // Path to store sitemap coverted to JSON
+const jsonSitemap = "./input/sitemap.json"; // Path to store sitemap coverted to JSON
 const outPath = typeof config.outputPath == "undefined" ? "./output/webscrape.csv" : config.outputPath;
 
 /* Get input of URLs for both input path, sitemap, and scrape of a listing page, depending on what config specifies.
