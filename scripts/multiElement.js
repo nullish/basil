@@ -48,7 +48,7 @@ const basilMultiElement = async (args) => {
             
             let timeStamp = new Date(Date.now()).toISOString();
             // Evaluate page to get all elements matching CSS selector
-            const lnx = await page.$$eval(confEl, as => as.map(a => [a.innerText, a.href]));
+            const lnx = await page.$$eval(confEl, as => as.map(a => [(a.innerText).replace(/\n/g, "||"), a.href]));
             let arrOut = await lnx.map(e => [timeStamp, arrUniquePages[elem], e[0].trim(), e[1]]);
             let strOut = arrOut.map(e => ('"' + e.join('","') + '"'));
             strOut.forEach(e => {
