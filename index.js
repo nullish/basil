@@ -6,9 +6,9 @@
 const yargs = require('yargs');
 const fs = require('fs');
 const csvOneDimArray = require("./csv-onedim-array"); // Loads CSV input and translates to array, element per row
-const downloadData = require("./downloadData"); // download from HTTP source
+const downloadData = require("axios-https-snip"); // download from HTTP source
 const writeFileAsync = require("./writeFileAsync"); // write file locally
-const convertSitemap = require("./convertSitemap"); // Converts XML sitemap for JSON input
+const convertSitemap = require("sitemap-url-array"); // Converts XML sitemap for JSON input
 const listCrawler = require("./scripts/listCrawler"); // Puppeteer script to scrape links from a paginated listing page, to be used as input
 const scrollCrawler = require("./scripts/scrollCrawler"); // Puppeteer script to scrape links from a lazy loading listing page, to be used as input
 
