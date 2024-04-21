@@ -29,7 +29,7 @@ const basilGetElement = async (args) => {
     k++;
     // Launch and Setup Chromium
     const browser = await puppeteer.launch({ headless: "new" });
-    const context = await browser.createIncognitoBrowserContext();
+    const context = await browser.createBrowserContext();
     const page = await context.newPage();
     page.setJavaScriptEnabled(true);
 
@@ -50,9 +50,11 @@ const basilGetElement = async (args) => {
                 waitUntil: "networkidle2",
               });
               // Get element to search for and report about
-              let elHandle = await page.$x(
+              let elHandle = await page.waitForSelector(
                 confEl,
               );
+              /** @todo continue to refactor according to testEl val below */
+              const testEl = await page.$eval(confEl, element => element.innerText);
               let timeStamp = new Date(Date.now()).toISOString();
               // Get attribute value to report
               if (elHandle.length > 0) {

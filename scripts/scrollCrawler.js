@@ -19,7 +19,7 @@ const basilScrollCrawler = async (args) => {
         defaultViewport: null,
         args: ['--start-maximized']
     });
-    const context = await browser.createIncognitoBrowserContext();
+    const context = await browser.createBrowserContext();
     const page = await context.newPage();
     page.setJavaScriptEnabled(true);
     const arrLinks = [];

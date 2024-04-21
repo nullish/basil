@@ -20,7 +20,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "args": ["placementLink"],
+            "args": ["get-element-file"],
             "program": "${workspaceFolder}/index.js"
         },
         {
