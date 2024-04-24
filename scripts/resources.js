@@ -10,7 +10,7 @@ const fs = require('fs');
  const basilResources = async (args) => {
   const {parallel, outputPath, arrUniquePages} = args; // Passed from index.js containing specifics for the scrape
   const outPath = typeof (outputPath) == 'undefined' ? './output/webscrape.csv' : outputPath;
-  const headerRow = '"timestamp","URL","resourceURI","Error"'; // Header row for output
+  const headerRow = '"timestamp","URL","resourceURI","resourceTopLevelDomain","Error"'; // Header row for output
 
   const parallelBatches = Math.ceil(arrUniquePages.length / parallel);
 
@@ -50,7 +50,12 @@ const fs = require('fs');
               waitUntil: "networkidle2",
             });
             let timeStamp = new Date(Date.now()).toISOString(); 
-            let arrOut = await ress.map(e => [timeStamp, arrUniquePages[elem], e]);
+            let arrOut = ress.map(e => [
+              timeStamp,
+              arrUniquePages[elem],
+              e,
+              e.match(/((?<=https:\/\/)|(?<=http:\/\/)).*?(?=\/)/g)[0], // top level domain
+            ]);
             let strOut = arrOut.map(e => ('"' + e.join('","') + '",""'));
             strOut.forEach(e => {
               console.log(e);
@@ -59,8 +64,8 @@ const fs = require('fs');
           } catch (err) {
             // Report failing element and standard error response
             let timeStamp = new Date(Date.now()).toISOString();
-            console.log(`"${timeStamp}","${arrUniquePages[elem]}","","${err}"`);
-            fs.appendFileSync(outPath, `"${timeStamp}","${arrUniquePages[elem]}","","${err}"`);
+            console.log(`"${timeStamp}","${arrUniquePages[elem]}","","","${err}"`);
+            fs.appendFileSync(outPath, `"${timeStamp}","${arrUniquePages[elem]}","","","${err}"`);
           }
         }));
       }
