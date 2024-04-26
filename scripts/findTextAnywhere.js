@@ -26,7 +26,7 @@
     k++
     // Launch and Setup Chromium
     const browser = await puppeteer.launch({headless: "new"});
-    const context = await browser.createIncognitoBrowserContext();
+    const context = await browser.createBrowserContext();
     const page = await context.newPage();
     page.setJavaScriptEnabled(true)
 
@@ -47,9 +47,9 @@
             });
             
             // Get element to search for and report about
-            let elHandle = await page.$x("//body");
+            await page.waitForSelector('body');
             let timeStamp = new Date(Date.now()).toISOString();
-            let bodyHTML = await page.evaluate(el => el.innerHTML, elHandle[0]);
+            let bodyHTML = await page.$eval('body', element => element.innerHTML);
             // c-nav negative match used to avoid nav items.
             console.log(`"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","${bodyHTML.match(rx) === null ? 0 : bodyHTML.match(rx).length}",""`)
             fs.appendFileSync(outPath, `"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","${bodyHTML.match(rx) === null ? 0 : bodyHTML.match(rx).length}",""\n`)
