@@ -8,7 +8,7 @@ const fs = require('fs');
 const { Console } = require("console");
 
 const basilGetElement = async (args) => {
-  const {parallel, outputPath, arrUniquePages, script} = args; // Passed from index.js containing specifics for the scrape
+  const { parallel, outputPath, arrUniquePages, script } = args; // Passed from index.js containing specifics for the scrape
   const confEl = script.params.find(e => e.key == 'element').value; // Element to search for from config file
   const confAttr = script.params.find(e => e.key == 'attribute').value; // Attribute to search for from config file
   const outPath = typeof (outputPath) == 'undefined' ? './output/webscrape.csv' : outputPath;
@@ -19,7 +19,7 @@ const basilGetElement = async (args) => {
   console.log(
     `Scraping ${arrUniquePages.length} pages for titles, in batches of ${parallel}`
   );
-  
+
   console.log(" This will result in " + parallelBatches + " batches.");
   console.log(headerRow);
   fs.appendFileSync(outPath, `${headerRow}\n`);
@@ -51,34 +51,39 @@ const basilGetElement = async (args) => {
               });
               // Get element to search for and report about
               let elHandle = await page.waitForSelector(
-               confEl,
+                confEl,
               );
               /** @todo try if statement rather than switch so confAttr can be passed successfully */
               let timeStamp = new Date(Date.now()).toISOString();
               // Get attribute value to report
-                let txtOut;
-                switch (confAttr) {
-                  case "innerHTML":
-                    txtOut = await page.$eval(confEl, element => element.innerHTML);
-                    txtOut = txtOut.replace(/\n/g, "");
-                    console.log(`"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","${txtOut}",""`);
-                    fs.appendFileSync(outPath, `"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","${txtOut}",""\n`);
-                    break;
-                  case "innerText":
-                    txtOut = await page.$eval(confEl, element => element.innerText);
-                    txtOut = txtOut.replace(/\n/g, "");
-                    console.log(`"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","${txtOut}",""`);
-                    fs.appendFileSync(outPath, `"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","${txtOut}",""\n`);
-                    break;
-                  default:
-                    //txtOut = await page.evaluate((el, a) => el.getAttribute(a), elHandle[0], confAttr);
-                    /** @todo try transferring args with this: 
-                     * https://github.com/puppeteer/puppeteer/issues/4376#issuecomment-488230352 */
-                    txtOut =  await page.$eval(confEl, element => element.getAttribute(confAttr));
-                    txtOut = txtOut.replace(/\n/g, "");
-                    console.log(`"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","${txtOut}",""`);
-                    fs.appendFileSync(outPath, `"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","${txtOut}",""\n`);
-                }
+              let txtOut;
+              switch (confAttr) {
+                case "innerHTML":
+                  txtOut = await page.$eval(confEl, element => element.innerHTML);
+                  txtOut = txtOut.replace(/\n/g, "");
+                  console.log(`"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","${txtOut}",""`);
+                  fs.appendFileSync(outPath, `"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","${txtOut}",""\n`);
+                  break;
+                case "innerText":
+                  txtOut = await page.$eval(confEl, element => element.innerText);
+                  txtOut = txtOut.replace(/\n/g, "");
+                  console.log(`"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","${txtOut}",""`);
+                  fs.appendFileSync(outPath, `"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","${txtOut}",""\n`);
+                  break;
+                default:
+                  //txtOut = await page.evaluate((el, a) => el.getAttribute(a), elHandle[0], confAttr);
+                  /** @todo try transferring args with this: 
+                   * https://github.com/puppeteer/puppeteer/issues/4376#issuecomment-488230352 */
+                  txtOut = await page.$eval(
+                    confEl,
+                    (element, a) => element.getAttribute(a),
+                    confAttr
+                  );
+                  //txtOut = await page.$eval(confEl, element => element.getAttribute(confAttr));
+                  txtOut = txtOut.replace(/\n/g, "");
+                  console.log(`"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","${txtOut}",""`);
+                  fs.appendFileSync(outPath, `"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","${txtOut}",""\n`);
+              }
             } catch (err) {
               let timeStamp = new Date(Date.now()).toISOString();
               console.log(`"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","","${err}"`);
