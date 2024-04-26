@@ -46,16 +46,11 @@ const basilCheckForElement = async (args) => {
             });
 
             // Get element to search for and report about
-            let elHandle = await page.$x(confEl);
+            let boolHandle = await page.waitForSelector(confEl) ? true : false;
             let timeStamp = new Date(Date.now()).toISOString();
             // Get attribute value to report
-            if (elHandle.length > 0) {
-              console.log(`"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","true",""`)
-              fs.appendFileSync(outPath, `"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","true",""\n`);
-            } else {
-              console.log(`"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","false",""`)
-              fs.appendFileSync(outPath, `"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","false",""\n`)
-            }
+            console.log(`"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","${boolHandle}",""`)
+            fs.appendFileSync(outPath, `"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","${boolHandle}",""\n`);
           } catch (err) {
             // Report failing element and standard error response
             let timeStamp = new Date(Date.now()).toISOString();

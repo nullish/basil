@@ -53,7 +53,6 @@ const basilGetElement = async (args) => {
               let elHandle = await page.waitForSelector(
                 confEl,
               );
-              /** @todo try if statement rather than switch so confAttr can be passed successfully */
               let timeStamp = new Date(Date.now()).toISOString();
               // Get attribute value to report
               let txtOut;
@@ -71,15 +70,11 @@ const basilGetElement = async (args) => {
                   fs.appendFileSync(outPath, `"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","${txtOut}",""\n`);
                   break;
                 default:
-                  //txtOut = await page.evaluate((el, a) => el.getAttribute(a), elHandle[0], confAttr);
-                  /** @todo try transferring args with this: 
-                   * https://github.com/puppeteer/puppeteer/issues/4376#issuecomment-488230352 */
                   txtOut = await page.$eval(
                     confEl,
                     (element, a) => element.getAttribute(a),
                     confAttr
                   );
-                  //txtOut = await page.$eval(confEl, element => element.getAttribute(confAttr));
                   txtOut = txtOut.replace(/\n/g, "");
                   console.log(`"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","${txtOut}",""`);
                   fs.appendFileSync(outPath, `"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","${txtOut}",""\n`);
