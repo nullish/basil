@@ -28,7 +28,7 @@ const basilRedirects = async (args) => {
     k++;
     // Launch and Setup Chromium
     const browser = await puppeteer.launch({ headless: "new" });
-    const context = await browser.createIncognitoBrowserContext();
+    const context = await browser.createBrowserContext();
     const page = await context.newPage();
     page.setJavaScriptEnabled(true);
 
@@ -51,16 +51,10 @@ const basilRedirects = async (args) => {
               let stCode = res.status();
               let stText = res.statusText();
               let resUrl = res.url();
-              let elTitle = await page.$x("//title");
-              let elHeading = await page.$x("//h1");
-              let pageTitle = await page.evaluate(
-                (el) => el.innerText,
-                elTitle[0]
-              );
-              let heading = await page.evaluate(
-                (el) => el.innerText,
-                elHeading[0]
-              );
+              await page.waitForSelector("title");
+              await page.waitForSelector("h1");
+              let pageTitle = await page.$eval('title', element => element.innerHTML);
+              let heading = await page.$eval('h1', element => element.innerText);
               let timeStamp = new Date(Date.now()).toISOString();
               let arrOut;
               if (res.request().redirectChain().length > 0) {
