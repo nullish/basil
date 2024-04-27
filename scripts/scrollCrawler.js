@@ -58,11 +58,3 @@ const basilScrollCrawler = async (args) => {
 };
 
 module.exports = basilScrollCrawler;
-
-/*
-basilScrollCrawler({
-    startUrl: "https://blog.justinmallone.com/tag/microblog/",
-    maxScrolls: 10,
-    linkSelector: "a.post-card-content-link",
-});
-*/
