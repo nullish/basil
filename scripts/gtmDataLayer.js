@@ -28,7 +28,7 @@ const basilGTMdataLayer = async (args) => {
         k++;
         // Launch and Setup Chromium
         const browser = await puppeteer.launch({ headless: "new" });
-        const context = await browser.createIncognitoBrowserContext();
+        const context = await browser.createBrowserContext();
         const page = await context.newPage();
         page.setJavaScriptEnabled(true);
 
@@ -50,7 +50,7 @@ const basilGTMdataLayer = async (args) => {
 
                         let timeStamp = new Date(Date.now()).toISOString();
                         const dlGTM = new puppeteerDataLayer(page, containerID);
-                        /* Uncomment for testing which variables you want to scrape 
+                        /* Uncomment for testing which variables you want to scrape
                         const dataModel = await dlGTM.getDataModel();
                         console.log(dataModel);
                         */

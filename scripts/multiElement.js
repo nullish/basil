@@ -26,7 +26,7 @@ const basilMultiElement = async (args) => {
     k++
     // Launch and Setup Chromium
     const browser = await puppeteer.launch({headless: "new"});
-    const context = await browser.createIncognitoBrowserContext();
+    const context = await browser.createBrowserContext();
     const page = await context.newPage();
     page.setJavaScriptEnabled(true)
 

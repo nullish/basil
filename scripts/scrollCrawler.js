@@ -19,7 +19,7 @@ const basilScrollCrawler = async (args) => {
         defaultViewport: null,
         args: ['--start-maximized']
     });
-    const context = await browser.createIncognitoBrowserContext();
+    const context = await browser.createBrowserContext();
     const page = await context.newPage();
     page.setJavaScriptEnabled(true);
     const arrLinks = [];
@@ -58,11 +58,3 @@ const basilScrollCrawler = async (args) => {
 };
 
 module.exports = basilScrollCrawler;
-
-/*
-basilScrollCrawler({
-    startUrl: "https://blog.justinmallone.com/tag/microblog/",
-    maxScrolls: 10,
-    linkSelector: "a.post-card-content-link",
-});
-*/

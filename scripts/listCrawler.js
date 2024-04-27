@@ -18,7 +18,7 @@ const basilListCrawler = async (args) => {
     defaultViewport: null,
     args: ['--start-maximized']
   });
-  const context = await browser.createIncognitoBrowserContext();
+  const context = await browser.createBrowserContext();
   const page = await context.newPage();
   page.setJavaScriptEnabled(true);
   const arrLinks = [];
@@ -38,7 +38,7 @@ const basilListCrawler = async (args) => {
 
   while (hasMorePages) {
     try {
-      hasMorePages = await page.waitForXPath(moreItems);  
+      hasMorePages = await page.waitForSelector(moreItems);  
     } catch (error) {
       hasMorePages = false;
     };

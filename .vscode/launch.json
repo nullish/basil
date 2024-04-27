@@ -20,7 +20,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "args": ["placementLink"],
+            "args": ["get-element-file"],
             "program": "${workspaceFolder}/index.js"
         },
         {
@@ -74,11 +74,11 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "multiElement",
+            "name": "checkForElement",
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "args": ["footer-links"],
+            "args": ["count-headings"],
             "program": "${workspaceFolder}/index.js"
         },
         {
