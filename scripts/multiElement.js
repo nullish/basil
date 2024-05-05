@@ -8,7 +8,7 @@ const puppeteer = require("puppeteer");
 const fs = require('fs');
 
 const basilMultiElement = async (args) => {
-  const {parallel, outputPath, arrUniquePages, script} = args; // Passed from index.js containing specifics for the scrape
+  const {parallel, outputPath, arrUniquePages, script, followRedirect } = args; // Passed from index.js containing specifics for the scrape
   const confEl = script.params.find(e => e.key == 'element').value;
   const outPath = typeof (outputPath) == 'undefined' ? './output/webscrape.csv' : outputPath;
   const headerRow = '"timestamp","URL","linkText","linkTarget","Error"';

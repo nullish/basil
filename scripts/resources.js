@@ -8,7 +8,7 @@ const puppeteer = require("puppeteer");
 const fs = require('fs');
 
  const basilResources = async (args) => {
-  const {parallel, outputPath, arrUniquePages} = args; // Passed from index.js containing specifics for the scrape
+  const {parallel, outputPath, arrUniquePages, followRedirect} = args; // Passed from index.js containing specifics for the scrape
   const outPath = typeof (outputPath) == 'undefined' ? './output/webscrape.csv' : outputPath;
   const headerRow = '"timestamp","URL","resourceURI","resourceTopLevelDomain","Error"'; // Header row for output
 

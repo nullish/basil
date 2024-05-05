@@ -8,7 +8,7 @@
  const fs = require('fs');
 
  const basilFindTextAnywhere = async (args) => {
-  const {parallel, outputPath, arrUniquePages, script} = args; // Passed from index.js containing specifics for the scrape
+  const {parallel, outputPath, arrUniquePages, script, followRedirect } = args; // Passed from index.js containing specifics for the scrape
   const confRegex = script.params.find(e => e.key == 'regexPattern').value;
   const rx = new RegExp(confRegex, 'gmis'); // Create regex patteern for use when matching against page HTML
   const outPath = typeof outputPath == "undefined" ? "./output/webscrape.csv" : outputPath;

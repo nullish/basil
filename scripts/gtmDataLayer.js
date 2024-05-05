@@ -9,7 +9,7 @@ const fs = require('fs');
 const puppeteerDataLayer = require('puppeteer-datalayer');
 
 const basilGTMdataLayer = async (args) => {
-    const { parallel, outputPath, arrUniquePages, script } = args; // Passed from index.js containing specifics for the scrape
+    const { parallel, outputPath, arrUniquePages, script, followRedirect } = args; // Passed from index.js containing specifics for the scrape
     const containerID = script.params.find(e => e.key == "containerID").value;
     const gtmAttributeName = script.params.find(e => e.key == "gtmAttributeName").value;
     const outPath = typeof (outputPath) == 'undefined' ? './output/webscrape.csv' : outputPath;
