@@ -52,6 +52,17 @@ const screenshotColleges = async (colleges, parallel) => {
         // promises push
         console.log('🖖 I promise to screenshot: ' + colleges[elem].name)
         promises.push(browser.newPage().then(async page => {
+   // If config value is false, abort on encountering redirect
+            if (!followRedirect) {
+              await page.setRequestInterception(true); 
+              page.on('request', (request) => {
+                if (request.isNavigationRequest() && request.redirectChain().length) {
+                  request.abort();
+                } else {
+                  request.continue();
+                };
+            });
+          };
           await page.setViewport({ width: 1280, height: 800 })
           try {
             // Only create screenshot if page.goto get's no error

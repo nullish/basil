@@ -8,7 +8,7 @@
  const fs = require('fs');
 
  const basilFindTextAnywhere = async (args) => {
-  const {parallel, outputPath, arrUniquePages, script} = args; // Passed from index.js containing specifics for the scrape
+  const {parallel, outputPath, arrUniquePages, script, followRedirect } = args; // Passed from index.js containing specifics for the scrape
   const confRegex = script.params.find(e => e.key == 'regexPattern').value;
   const rx = new RegExp(confRegex, 'gmis'); // Create regex patteern for use when matching against page HTML
   const outPath = typeof outputPath == "undefined" ? "./output/webscrape.csv" : outputPath;
@@ -37,7 +37,18 @@
       if (arrUniquePages[elem] != undefined) {
         // Promise to scrape pages
         // promises push
-        promises.push(browser.newPage().then(async page => {          
+        promises.push(browser.newPage().then(async page => {
+   // If config value is false, abort on encountering redirect
+            if (!followRedirect) {
+              await page.setRequestInterception(true); 
+              page.on('request', (request) => {
+                if (request.isNavigationRequest() && request.redirectChain().length) {
+                  request.abort();
+                } else {
+                  request.continue();
+                };
+            });
+          };          
           try {
             // Set default navigation timeout.
             await page.setDefaultNavigationTimeout(30000); 

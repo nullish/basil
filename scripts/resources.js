@@ -8,7 +8,7 @@ const puppeteer = require("puppeteer");
 const fs = require('fs');
 
  const basilResources = async (args) => {
-  const {parallel, outputPath, arrUniquePages} = args; // Passed from index.js containing specifics for the scrape
+  const {parallel, outputPath, arrUniquePages, followRedirect} = args; // Passed from index.js containing specifics for the scrape
   const outPath = typeof (outputPath) == 'undefined' ? './output/webscrape.csv' : outputPath;
   const headerRow = '"timestamp","URL","resourceURI","resourceTopLevelDomain","Error"'; // Header row for output
 
@@ -38,6 +38,17 @@ const fs = require('fs');
         // Promise to scrape pages
         // promises push
         promises.push(browser.newPage().then(async page => {
+   // If config value is false, abort on encountering redirect
+            if (!followRedirect) {
+              await page.setRequestInterception(true); 
+              page.on('request', (request) => {
+                if (request.isNavigationRequest() && request.redirectChain().length) {
+                  request.abort();
+                } else {
+                  request.continue();
+                };
+            });
+          };
           try {
             // Set default navigation timeout.
             await page.setDefaultNavigationTimeout(30000); 

@@ -20,7 +20,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "args": ["get-element-file"],
+            "args": ["no-redirect"],
             "program": "${workspaceFolder}/index.js"
         },
         {

@@ -26,7 +26,7 @@ const arrayAppendSlash = (arrIn) => {
 };
 
 const basilMatchLinkArray = async (args) => {
-  const { parallel, outputPath, arrUniquePages, script } = args; // Passed from index.js containing specifics for the scrape
+  const { parallel, outputPath, arrUniquePages, script, followRedirect } = args; // Passed from index.js containing specifics for the scrape
   const arrInputLinks = script.params.find((e) => e.key == "links").value; // List of links to locate
   const outPath =
     typeof outputPath == "undefined" ? "./output/webscrape.csv" : outputPath;
@@ -62,6 +62,17 @@ const basilMatchLinkArray = async (args) => {
         // promises push
         promises.push(
           browser.newPage().then(async (page) => {
+   // If config value is false, abort on encountering redirect
+            if (!followRedirect) {
+              await page.setRequestInterception(true); 
+              page.on('request', (request) => {
+                if (request.isNavigationRequest() && request.redirectChain().length) {
+                  request.abort();
+                } else {
+                  request.continue();
+                };
+            });
+          };
             try {
               // Set default navigation timeout.
               await page.setDefaultNavigationTimeout(30000);
