@@ -37,7 +37,18 @@ const basilMultiElement = async (args) => {
       if (arrUniquePages[elem] != undefined) {
         // Promise to scrape pages
         // promises push
-        promises.push(browser.newPage().then(async page => {          
+        promises.push(browser.newPage().then(async page => {
+   // If config value is false, abort on encountering redirect
+            if (!followRedirect) {
+              await page.setRequestInterception(true); 
+              page.on('request', (request) => {
+                if (request.isNavigationRequest() && request.redirectChain().length) {
+                  request.abort();
+                } else {
+                  request.continue();
+                };
+            });
+          };          
           try {
             // Set default navigation timeout.
             await page.setDefaultNavigationTimeout(30000); 
