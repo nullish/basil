@@ -25,7 +25,7 @@ const basilCheckForElement = async (args) => {
   let k = 0;
   // create a new progress bar with preset
   const bar = new _progress.Bar({
-    format: 'progress [{bar}] {percentage}% | ETA: {eta_formatted} | {value}/{total}'
+    format: 'progress [{bar}] {percentage}% | ETA: {eta_formatted} | Duration: {duration_formatted} | {value}/{total}'
   }, _progress.Presets['shades_classic']);
   bar.start(arrUniquePages.length, 0);
   for (let i = 0; i < arrUniquePages.length; i += parallel) {
