@@ -24,7 +24,9 @@ const basilCheckForElement = async (args) => {
   // Split up the Array of arrUniquePages
   let k = 0;
   // create a new progress bar with preset
-  const bar = new _progress.Bar({}, _progress.Presets['shades_classic']);
+  const bar = new _progress.Bar({
+    format: 'progress [{bar}] {percentage}% | ETA: {eta_formatted} | {value}/{total}'
+  }, _progress.Presets['shades_classic']);
   bar.start(arrUniquePages.length, 0);
   for (let i = 0; i < arrUniquePages.length; i += parallel) {
     k++
