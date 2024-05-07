@@ -32,5 +32,8 @@
   "bugs": {
     "url": "https://github.com/nullish/basil/issues"
   },
-  "homepage": "https://github.com/nullish/basil#readme"
+  "homepage": "https://github.com/nullish/basil#readme",
+  "devDependencies": {
+    "prettier": "^3.2.5"
+  }
 }
