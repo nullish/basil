@@ -78,7 +78,6 @@ const basilResources = async (args) => {
               ]);
               let strOut = arrOut.map((e) => '"' + e.join('","') + '",""');
               strOut.forEach((e) => {
-                console.log(e);
                 fs.appendFileSync(outPath, `${e}\n`);
               });
             } catch (err) {

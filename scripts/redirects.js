@@ -109,16 +109,12 @@ const basilRedirects = async (args) => {
               }
               let strOut = arrOut.join('","');
               fs.appendFileSync(outPath, `"${strOut}"\n`);
-              console.log(`"${strOut}"`);
             } catch (err) {
               // Report failing element and standard error response
               let timeStamp = new Date(Date.now()).toISOString();
               fs.appendFileSync(
                 outPath,
                 `"${timeStamp}","${arrUniquePages[elem]}","","","","","","","",""${err}\n"`,
-              );
-              console.log(
-                `"${timeStamp}","${arrUniquePages[elem]}","","","","","","","",""${err}"`,
               );
             }
           }),

@@ -104,7 +104,6 @@ const basilMatchLinkArray = async (args) => {
                       `"${timeStamp}","${arrUniquePages[elem]}","","NOTHING FOUND"`,
                     ];
               strOut.forEach((e) => {
-                console.log(e);
                 fs.appendFileSync(outPath, `${e}\n`);
               });
             } catch (err) {

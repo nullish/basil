@@ -80,7 +80,6 @@ const basilGTMdataLayer = async (args) => {
               let gtmAttributeValue = await dlGTM.get(gtmAttributeName);
               arrOut = [timeStamp, arrUniquePages[elem], gtmAttributeValue];
               let strOut = arrOut.join('","');
-              console.log(`"${strOut}"`);
               fs.appendFileSync(outPath, `"${strOut}"\n`);
             } catch (err) {
               // Report failing element and standard error response

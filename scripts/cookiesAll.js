@@ -96,7 +96,6 @@ const basilCookiesAll = async (args) => {
               );
               let strOut = arrClean.map((e) => '"' + e.join('","') + '",""');
               strOut.forEach((e) => {
-                console.log(e);
                 fs.appendFileSync(outPath, `${e}\n`);
               });
             } catch (err) {
