@@ -78,7 +78,8 @@ const screenshotColleges = async (colleges, parallel) => {
 
     // await promise all and close browser
     await Promise.all(promises)
-    await browser.close()
+    await browser.close();
+bar.update(i);()
 
     console.log('\nI finished this batch. I\'m ready for the next batch');
   }

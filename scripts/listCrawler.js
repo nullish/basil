@@ -50,6 +50,7 @@ const basilListCrawler = async (args) => {
   };
 
   await browser.close();
+bar.update(i);();
   return arrLinks;
 };
 

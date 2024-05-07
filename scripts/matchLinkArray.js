@@ -115,6 +115,7 @@ const basilMatchLinkArray = async (args) => {
     // await promise all and close browser
     await Promise.all(promises);
     await browser.close();
+bar.update(i);();
   }
 };
 

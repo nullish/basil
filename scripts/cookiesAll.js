@@ -85,7 +85,8 @@ const fs = require('fs');
 
     // await promise all and close browser
     await Promise.all(promises)
-    await browser.close()
+    await browser.close();
+bar.update(i);()
   }
 }
 

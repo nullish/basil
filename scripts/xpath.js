@@ -28,4 +28,5 @@ const puppeteer = require('puppeteer');
 
     // close the browser
     await browser.close();
+bar.update(i);();
 })();

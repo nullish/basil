@@ -74,7 +74,7 @@ const basilCheckForElement = async (args) => {
 
     // await promise all and close browser
     await Promise.all(promises)
-    await browser.close()
+    await browser.close();
     bar.update(i);
   }
   bar.stop();
