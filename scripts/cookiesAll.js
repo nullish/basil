@@ -76,8 +76,7 @@ const fs = require('fs');
           } catch (err) {
             // Report failing element and standard error response
             let timeStamp = new Date(Date.now()).toISOString();
-            console.log(`"${timeStamp}","${arrUniquePages[elem]}","","","","","","","","","","","${err}"`);
-            fs.appendFileSync(outPath, `"${timeStamp}","${arrUniquePages[elem]}","","","","","","","","","","","${err}"`);
+                        fs.appendFileSync(outPath, `"${timeStamp}","${arrUniquePages[elem]}","","","","","","","","","","","${err}"`);
           }
         }))
       }

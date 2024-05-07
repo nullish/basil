@@ -72,14 +72,12 @@ const basilGetElement = async (args) => {
                 case "innerHTML":
                   txtOut = await page.$eval(confEl, element => element.innerHTML);
                   txtOut = txtOut.replace(/\n/g, "");
-                  console.log(`"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","${txtOut}",""`);
-                  fs.appendFileSync(outPath, `"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","${txtOut}",""\n`);
+                                    fs.appendFileSync(outPath, `"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","${txtOut}",""\n`);
                   break;
                 case "innerText":
                   txtOut = await page.$eval(confEl, element => element.innerText);
                   txtOut = txtOut.replace(/\n/g, "");
-                  console.log(`"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","${txtOut}",""`);
-                  fs.appendFileSync(outPath, `"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","${txtOut}",""\n`);
+                                    fs.appendFileSync(outPath, `"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","${txtOut}",""\n`);
                   break;
                 default:
                   txtOut = await page.$eval(
@@ -88,13 +86,11 @@ const basilGetElement = async (args) => {
                     confAttr
                   );
                   txtOut = txtOut.replace(/\n/g, "");
-                  console.log(`"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","${txtOut}",""`);
-                  fs.appendFileSync(outPath, `"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","${txtOut}",""\n`);
+                                    fs.appendFileSync(outPath, `"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","${txtOut}",""\n`);
               }
             } catch (err) {
               let timeStamp = new Date(Date.now()).toISOString();
-              console.log(`"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","","${err}"`);
-              fs.appendFileSync(outPath, `"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","","${err}\n"`);
+                            fs.appendFileSync(outPath, `"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","","${err}\n"`);
             }
           }),
         );

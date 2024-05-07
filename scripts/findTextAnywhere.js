@@ -63,13 +63,11 @@
             let timeStamp = new Date(Date.now()).toISOString();
             let bodyHTML = await page.$eval('body', element => element.innerHTML);
             // c-nav negative match used to avoid nav items.
-            console.log(`"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","${bodyHTML.match(rx) === null ? 0 : bodyHTML.match(rx).length}",""`)
-            fs.appendFileSync(outPath, `"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","${bodyHTML.match(rx) === null ? 0 : bodyHTML.match(rx).length}",""\n`)
+                        fs.appendFileSync(outPath, `"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","${bodyHTML.match(rx) === null ? 0 : bodyHTML.match(rx).length}",""\n`)
           } catch (err) {
             // Report failing element and standard error response
             let timeStamp = new Date(Date.now()).toISOString();
-            console.log(`"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","","${err}"`)
-            fs.appendFileSync(outPath, `"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","","${err}\n"`)
+                        fs.appendFileSync(outPath, `"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","","${err}\n"`)
           }
         }))
       }

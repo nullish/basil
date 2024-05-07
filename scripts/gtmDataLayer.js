@@ -74,8 +74,7 @@ const basilGTMdataLayer = async (args) => {
                     } catch (err) {
                         // Report failing element and standard error response
                         let timeStamp = new Date(Date.now()).toISOString();
-                        console.log(`"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","","${err}"`);
-                        fs.appendFileSync(outPath, `"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","","${err}\n"`);
+                                                fs.appendFileSync(outPath, `"${timeStamp}","${k}","${j}","${arrUniquePages[elem]}","","${err}\n"`);
                     }
                 }))
             }

@@ -69,14 +69,12 @@ const basilMultiElement = async (args) => {
             })
             // Log if element not found
             if (strOut.length == 0) {
-              console.log(`"${timeStamp}","${arrUniquePages[elem]}","ELEMENT NOT FOUND",""`);
-              fs.appendFileSync(outPath, `"${timeStamp}","${arrUniquePages[elem]}","ELEMENT NOT FOUND",""\n`);
+                            fs.appendFileSync(outPath, `"${timeStamp}","${arrUniquePages[elem]}","ELEMENT NOT FOUND",""\n`);
             }
           } catch (err) {
             // Report failing element and standard error response
             let timeStamp = new Date(Date.now()).toISOString();
-            console.log(`"${timeStamp}","${arrUniquePages[elem]}","","${err}"`);
-            fs.appendFileSync(outPath, `"${timeStamp}","${arrUniquePages[elem]}","","${err}"\n`);
+                        fs.appendFileSync(outPath, `"${timeStamp}","${arrUniquePages[elem]}","","${err}"\n`);
           }
         }))
       }
