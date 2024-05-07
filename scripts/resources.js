@@ -8,7 +8,7 @@ const puppeteer = require("puppeteer");
 const fs = require('fs');
 
  const basilResources = async (args) => {
-  const {parallel, outputPath, arrUniquePages, followRedirect} = args; // Passed from index.js containing specifics for the scrape
+  const {parallel, outputPath, arrUniquePages, followRedirect, bar} = args; // Passed from index.js containing specifics for the scrape
   const outPath = typeof (outputPath) == 'undefined' ? './output/webscrape.csv' : outputPath;
   const headerRow = '"timestamp","URL","resourceURI","resourceTopLevelDomain","Error"'; // Header row for output
 
@@ -22,6 +22,7 @@ const fs = require('fs');
 
   // Split up the Array of arrUniquePages
   let k = 0
+  bar.start(arrUniquePages.length, 0);
   for (let i = 0; i < arrUniquePages.length; i += parallel) {
     k++;
     // Launch and Setup Chromium

@@ -33,6 +33,7 @@ const screenshotColleges = async (colleges, parallel) => {
 
   // Split up the Array of colleges
   let k = 0
+  bar.start(arrUniquePages.length, 0);
   for (let i = 0; i < colleges.length; i += parallel) {
     k++
     console.log('\nBatch ' + k + ' of ' + parallelBatches)

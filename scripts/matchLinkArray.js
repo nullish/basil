@@ -26,7 +26,7 @@ const arrayAppendSlash = (arrIn) => {
 };
 
 const basilMatchLinkArray = async (args) => {
-  const { parallel, outputPath, arrUniquePages, script, followRedirect } = args; // Passed from index.js containing specifics for the scrape
+  const { parallel, outputPath, arrUniquePages, script, followRedirect, bar } = args; // Passed from index.js containing specifics for the scrape
   const arrInputLinks = script.params.find((e) => e.key == "links").value; // List of links to locate
   const outPath =
     typeof outputPath == "undefined" ? "./output/webscrape.csv" : outputPath;
@@ -45,6 +45,7 @@ const basilMatchLinkArray = async (args) => {
 
   // Split up the Array of arrUniquePages
   let k = 0;
+  bar.start(arrUniquePages.length, 0);
   for (let i = 0; i < arrUniquePages.length; i += parallel) {
     k++;
     // Launch and Setup Chromium
