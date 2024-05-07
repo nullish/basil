@@ -34,6 +34,7 @@
   },
   "homepage": "https://github.com/nullish/basil#readme",
   "devDependencies": {
+    "eslint-config-prettier": "^9.1.0",
     "prettier": "^3.2.5"
   }
 }
