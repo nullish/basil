@@ -54,7 +54,6 @@ const basilScrollCrawler = async (args) => {
     const pageLinks = await page.$$eval(linkSelector, as => as.map(a => a.href));
     arrLinks.push(...pageLinks);
     await browser.close();
-bar.update(i);();
     return arrLinks;
 };
 
