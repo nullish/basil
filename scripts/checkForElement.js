@@ -6,10 +6,9 @@
 
 const puppeteer = require('puppeteer');
 const fs = require("fs");
-const _progress = require('cli-progress');
 
 const basilCheckForElement = async (args) => {
-  const {parallel, outputPath, arrUniquePages, script, followRedirect } = args; // Passed from index.js containing specifics for the scrape
+  const {parallel, outputPath, arrUniquePages, script, followRedirect, bar } = args; // Passed from index.js containing specifics for the scrape
   const confEl = script.params.find(e => e.key == 'element').value;
   const parallelBatches = Math.ceil(arrUniquePages.length / parallel);
   const outPath = typeof outputPath == "undefined" ? "./output/webscrape.csv" : outputPath;
@@ -21,10 +20,6 @@ const basilCheckForElement = async (args) => {
   fs.appendFileSync(outPath, `${headerRow}\n`);
   // Split up the Array of arrUniquePages
   let k = 0;
-  // create a new progress bar with preset
-  const bar = new _progress.Bar({
-    format: 'progress [{bar}] {percentage}% | ETA: {eta_formatted} | Duration: {duration_formatted} | {value}/{total}'
-  }, _progress.Presets['shades_classic']);
   bar.start(arrUniquePages.length, 0);
   for (let i = 0; i < arrUniquePages.length; i += parallel) {
     k++

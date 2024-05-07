@@ -11,6 +11,7 @@ const writeFileAsync = require("./writeFileAsync"); // write file locally
 const convertSitemap = require("sitemap-url-array"); // Converts XML sitemap for JSON input
 const listCrawler = require("./scripts/listCrawler"); // Puppeteer script to scrape links from a paginated listing page, to be used as input
 const scrollCrawler = require("./scripts/scrollCrawler"); // Puppeteer script to scrape links from a lazy loading listing page, to be used as input
+const _progress = require('cli-progress'); // Progress bar that will appear in STDOUT when scraper is running
 
 const main = async () => {
 // Load config
@@ -111,10 +112,13 @@ const followRedirect = typeof config.followRedirect == "undefined" ? true : conf
   fs.unlink(outPath, (err) => {
     if (err) {
       console.error(err);
-    } else {
-      //console.log("Existing output deleted.");
-    }
+    };
   });
+
+  // create a new progress bar to pass to scraper
+  config.bar = new _progress.Bar({
+    format: 'progress [{bar}] {percentage}% | ETA: {eta_formatted} | Duration: {duration_formatted} | {value}/{total}'
+  }, _progress.Presets['shades_classic']);
   
   return basilScript(config);
 };
