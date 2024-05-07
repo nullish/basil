@@ -4,7 +4,6 @@
   "description": "Bespoke Puppeteer webscraper instance",
   "main": "index.js",
   "dependencies": {
-    "ansi-colors": "^4.1.3",
     "axios": "^1.6.5",
     "axios-https-snip": "^1.1.0",
     "cli-progress": "^3.12.0",

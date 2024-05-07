@@ -7,8 +7,6 @@
 const puppeteer = require('puppeteer');
 const fs = require("fs");
 const _progress = require('cli-progress');
-const _colors = require('ansi-colors');
-
 
 const basilCheckForElement = async (args) => {
   const {parallel, outputPath, arrUniquePages, script, followRedirect } = args; // Passed from index.js containing specifics for the scrape
