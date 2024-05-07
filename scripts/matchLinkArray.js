@@ -26,7 +26,8 @@ const arrayAppendSlash = (arrIn) => {
 };
 
 const basilMatchLinkArray = async (args) => {
-  const { parallel, outputPath, arrUniquePages, script, followRedirect, bar } = args; // Passed from index.js containing specifics for the scrape
+  const { parallel, outputPath, arrUniquePages, script, followRedirect, bar } =
+    args; // Passed from index.js containing specifics for the scrape
   const arrInputLinks = script.params.find((e) => e.key == "links").value; // List of links to locate
   const outPath =
     typeof outputPath == "undefined" ? "./output/webscrape.csv" : outputPath;
@@ -37,7 +38,7 @@ const basilMatchLinkArray = async (args) => {
   const parallelBatches = Math.ceil(arrUniquePages.length / parallel);
 
   console.log(
-    `Scraping ${arrUniquePages.length} pages for links in array, in batches of ${parallel}`
+    `Scraping ${arrUniquePages.length} pages for links in array, in batches of ${parallel}`,
   );
   console.log(" This will result in " + parallelBatches + " batches.");
   console.log(headerRow);
@@ -63,17 +64,20 @@ const basilMatchLinkArray = async (args) => {
         // promises push
         promises.push(
           browser.newPage().then(async (page) => {
-   // If config value is false, abort on encountering redirect
+            // If config value is false, abort on encountering redirect
             if (!followRedirect) {
-              await page.setRequestInterception(true); 
-              page.on('request', (request) => {
-                if (request.isNavigationRequest() && request.redirectChain().length) {
+              await page.setRequestInterception(true);
+              page.on("request", (request) => {
+                if (
+                  request.isNavigationRequest() &&
+                  request.redirectChain().length
+                ) {
                   request.abort();
                 } else {
                   request.continue();
-                };
-            });
-          };
+                }
+              });
+            }
             try {
               // Set default navigation timeout.
               await page.setDefaultNavigationTimeout(30000);
@@ -96,7 +100,9 @@ const basilMatchLinkArray = async (args) => {
               let strOut =
                 arrOut.length > 0
                   ? arrOut.map((e) => '"' + e.join('","') + '"')
-                  : [`"${timeStamp}","${arrUniquePages[elem]}","","NOTHING FOUND"`];
+                  : [
+                      `"${timeStamp}","${arrUniquePages[elem]}","","NOTHING FOUND"`,
+                    ];
               strOut.forEach((e) => {
                 console.log(e);
                 fs.appendFileSync(outPath, `${e}\n`);
@@ -104,20 +110,22 @@ const basilMatchLinkArray = async (args) => {
             } catch (err) {
               // Report failing element and standard error response
               let timeStamp = new Date(Date.now()).toISOString();
-                            fs.appendFileSync(outPath, `"${timeStamp}","${arrUniquePages[elem]}","","${err}"\n`);
+              fs.appendFileSync(
+                outPath,
+                `"${timeStamp}","${arrUniquePages[elem]}","","${err}"\n`,
+              );
             }
-          })
+          }),
         );
-      };
+      }
     }
 
     // await promise all and close browser
     await Promise.all(promises);
     await browser.close();
-bar.update(i);
+    bar.update(i);
   }
- bar.stop();
+  bar.stop();
 };
 
 module.exports = basilMatchLinkArray;
-
