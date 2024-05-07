@@ -8,15 +8,13 @@ const puppeteer = require("puppeteer");
 const basilListCrawler = async (args) => {
   const { startUrl, linkSelector, moreItems } = args; // Params needed for crawling list page(s)
 
-  console.log(
-    `Collecting links to parse from: ${startUrl}`
-  );
+  console.log(`Collecting links to parse from: ${startUrl}`);
 
   // Launch and Setup Chromium
   const browser = await puppeteer.launch({
     headless: false,
     defaultViewport: null,
-    args: ['--start-maximized']
+    args: ["--start-maximized"],
   });
   const context = await browser.createBrowserContext();
   const page = await context.newPage();
@@ -29,7 +27,9 @@ const basilListCrawler = async (args) => {
   });
 
   const scrapeList = async () => {
-    const pageLinks = await page.$$eval(linkSelector, as => as.map(a => a.href));
+    const pageLinks = await page.$$eval(linkSelector, (as) =>
+      as.map((a) => a.href),
+    );
     //let arrOut = await pageLinks.map(e => e[0]);
     arrLinks.push(...pageLinks);
   };
@@ -38,16 +38,16 @@ const basilListCrawler = async (args) => {
 
   while (hasMorePages) {
     try {
-      hasMorePages = await page.waitForSelector(moreItems);  
+      hasMorePages = await page.waitForSelector(moreItems);
     } catch (error) {
       hasMorePages = false;
-    };
+    }
     if (hasMorePages) {
       await hasMorePages.click();
-      await page.waitForNetworkIdle({idleTime: 1000});
+      await page.waitForNetworkIdle({ idleTime: 1000 });
       await scrapeList();
-    };
-  };
+    }
+  }
 
   await browser.close();
   return arrLinks;

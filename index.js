@@ -11,6 +11,7 @@ const writeFileAsync = require("./writeFileAsync"); // write file locally
 const convertSitemap = require("sitemap-url-array"); // Converts XML sitemap for JSON input
 const listCrawler = require("./scripts/listCrawler"); // Puppeteer script to scrape links from a paginated listing page, to be used as input
 const scrollCrawler = require("./scripts/scrollCrawler"); // Puppeteer script to scrape links from a lazy loading listing page, to be used as input
+const _progress = require('cli-progress'); // Progress bar that will appear in STDOUT when scraper is running
 
 const main = async () => {
 // Load config
@@ -47,8 +48,8 @@ Pass an array of URLs to the scrpt module.
 
 const filePath = "./input/sitemap.xml"; // Path to store sitemap XML
 const jsonSitemap = "./input/sitemap.json"; // Path to store sitemap coverted to JSON
-const outPath = typeof config.outputPath == "undefined" ? "./output/webscrape.csv" : config.outputPath;
-const followRedirect = typeof config.followRedirect == "undefined" ? true : config.followRedirect; 
+const outPath = typeof config.outputPath == "undefined" ? "./output/webscrape.csv" : config.outputPath; // Optional output file location
+const followRedirect = typeof config.followRedirect == "undefined" ? true : config.followRedirect; // Option to follow redirects when scraping
 
 /* Get input of URLs for both input path, sitemap, and scrape of a listing page, depending on what config specifies.
   Combine them into a single input.
@@ -111,10 +112,13 @@ const followRedirect = typeof config.followRedirect == "undefined" ? true : conf
   fs.unlink(outPath, (err) => {
     if (err) {
       console.error(err);
-    } else {
-      console.log("Existing output deleted.");
-    }
+    };
   });
+
+  // create a new progress bar to pass to scraper
+  config.bar = new _progress.Bar({
+    format: 'progress [{bar}] {percentage}% | ETA: {eta_formatted} | Duration: {duration_formatted} | {value}/{total}'
+  }, _progress.Presets['shades_classic']);
   
   return basilScript(config);
 };
