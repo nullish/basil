@@ -2,7 +2,6 @@
 node_modules/*
 config/*
 config.json
-output/*
 !input
 input/*
 sitemaps/*
