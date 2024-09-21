@@ -59,10 +59,19 @@ const basilNimbusCrawler = async (args) => {
   await elSubmit.click();
   */
 
-  // Test for first list item
-  await page.waitForSelector(".notes-list-item-wrapper");
-  console.log("Logged on");
+  // Test for first list item and click it
+  const cssNote = ".notes-list-item-wrapper";
+  await page.waitForSelector(cssNote);
+  await page.click(cssNote);
+  const arrNotes = [];
+  let activeNote, activeNoteText;
+  activeNote = await page.waitForSelector(".note-title--container h1");
+  activeNoteText = await page.$eval(".note-title--container h1", (e) => e.innerText);
+  await page.keyboard.down('ArrowDown');
+  activeNote = await page.waitForSelector(".note-title--container h1");
+  activeNoteText = await page.$eval(".note-title--container h1", (e) => e.innerText);
 
+  console.log('next note');
   while (scrollCount < maxScrolls) {
     // Scroll to the bottom of the page
     await page.evaluate("window.scrollTo(0, document.body.scrollHeight)");
