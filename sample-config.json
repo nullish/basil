@@ -1,0 +1,91 @@
+{
+    "configs": [
+        {
+            "configName": "count-headings",
+            "parallel": 8,
+            "input": "input/sitemap.csv",
+            "urlSitemap": "https://www.example.com/sitemap",
+            "script": {
+                "name": "checkForElement",
+                "params": [
+                    {
+                        "key": "element",
+                        "value": "//li/a[contains(@class, 'pill')]"
+                    }
+                ]
+            }
+        },
+        {
+            "configName": "All media URLs",
+            "parallel": 8,
+            "urlSitemap": "https://www.example.com/sitemap",
+            "script": {
+                "name": "multiElement",
+                "params": 
+                [
+                    {"key": "element", "value": "a[href*=\"https://www.example.com/-/media/home/business/\"]"}
+                ]
+            }
+        },
+        {
+            "configName": "quietRedirect",
+            "parallel": 8,
+            "input": "input/quiet-redirect.csv",
+            "urlSitemap": "https://www.example.com/sitemap",
+            "script": {
+              "name": "redirects",
+              "params": []
+            }
+          },
+          {
+            "configName": "redirectsFromList",
+            "parallel": 8,
+            "input": "input/short.csv",
+            "listCrawl": {
+                "startUrl": "https://www.example.com/list-of-links",
+                "linkSelector": "::-p-xpath(//a[@class='m-snippet__link'])",
+                "moreItems": "(//button[contains(@aria-label, 'Go to page') and .//span[contains(@class, 'chevron--right')]])[1]"
+            },
+            "script": {
+                "name": "redirects",
+                "params": []
+            }
+        },
+        {
+            "configName": "linkArray",
+            "parallel": 8,
+            "input": "input/bus-washup.csv",
+            "script": {
+              "name": "matchLinkArray",
+              "params": [
+                {
+                  "key": "links",
+                  "value": [
+                    "https://www.example.com/about-this-website",
+                    "https://www.example.com/study-here/apply",
+                    "https://www.example.com/about-us/who-we-are",
+                    "https://www.example.com/about-us/our-values/sustainability"
+                ]}
+              ]
+            }
+          },
+          {
+            "configName": "eg-lazyload",
+            "parallel": 8,
+            "input": "",
+            "scrollList": {
+                "startUrl": "https://blog.justinmallone.com/tag/microblog/",
+                "linkSelector": "a.post-card-content-link",
+                "maxScrolls": 10
+            },
+            "script": {
+                "name": "getElement",
+                "params": 
+                [
+                    {"key": "element", "value": "//h1"},
+                    {"key": "attribute", "value": "innerText"}
+                ]
+            }
+        }
+    ]
+}
