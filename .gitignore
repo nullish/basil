@@ -9,5 +9,5 @@ tmp/*
 cookies/*
 scripts/private/*
 .env
-download/*
-!download/README.md
+downloads/*
+!downloads/README.md
