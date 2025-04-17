@@ -10,7 +10,7 @@
     "eslint": "^7.32.0",
     "eslint-config-google": "^0.14.0",
     "last-redirect": "^1.1.0",
-    "puppeteer": "^22.13.0",
+    "puppeteer": "^22.15.0",
     "puppeteer-datalayer": "^1.0.2",
     "sitemap-url-array": "^1.0.1",
     "yargs": "^17.7.2"
